@@ -1,18 +1,18 @@
-@extends("backstage.layouts.app")
+@extends('backstage.layouts.app')
 
-@section("content")
+@section('content')
     <div class="row">
         <div class="col-12">
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">私人订制</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">私人订制班型</a></li>
-                        <li class="breadcrumb-item active">新增</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">1</a></li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">2</a></li>
+                        <li class="breadcrumb-item active">3</li>
                     </ol>
                 </div>
                 <h4 class="page-title">
-                    新增
+                    3
                 </h4>
             </div>
         </div>
@@ -28,9 +28,10 @@
                         <div class="form-group row mb-3">
                             <label for="param" class="col-2 col-form-label">Param</label>
                             <div class="col-10">
-                                <input type="text" id="param" name="param" class="form-control"  placeholder="公开课底薪" value="{{ $item->param ?? old('param') }}">
+                                <input type="text" id="param" name="param" class="form-control"  placeholder="" value="{{ $item->param ?? old('param') }}">
                             </div>
                         </div>
+
                         <div class="form-group row mb-3">
                             <label for="options" class="col-2 col-form-label">Options</label>
                             <div class="col-10">
@@ -44,6 +45,29 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="options" class="col-2 col-form-label">Multiple Options</label>
+                            <div class="col-10">
+                                <select class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="Choose ...">
+                                    @forelse($tags as $tag)
+                                        <option value="{{ $tag->id }}" @if(($item->param ?? old('param')) == $tag->id) selected @endif>
+                                            {{ $tag->name }}
+                                        </option>
+                                    @empty
+
+                                    @endforelse
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-3">
+                            <label for="content" class="col-2 col-form-label">textarea</label>
+                            <div class="col-10">
+                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容"></textarea>
+                            </div>
+                        </div>
+
                         <div class="form-group row mb-3">
                             <label for="status" class="col-2 col-form-label">IsShow</label>
                             <div class="row col-10" style="margin-top: 8px;">
