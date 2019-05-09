@@ -16,11 +16,11 @@ class QuestionController extends Controller
         return view('exam::questions.index');
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $tags = Tag::query()->where('status', true)->get();
 
-        return view('exam::questions.create_and_edit', compact('tags'));
+        return view('exam::questions.'.$request->type.'_create_and_edit', compact('tags'));
     }
 
     public function store(QuestionRequest $request)

@@ -38,7 +38,7 @@
                         <a href="{{ route('backstage.questions.index') }}">题库列表</a>
                     </li>
                     <li>
-                        <a href="{{ route('backstage.questions.create') }}">手动录入试题</a>
+                        <a href="{{ route('backstage.questions.create', ['type' => 'radio']) }}">手动录入试题</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);">批量导入试题</a>
