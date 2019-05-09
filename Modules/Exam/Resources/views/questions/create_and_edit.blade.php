@@ -34,7 +34,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                    <form id="submit-form" action="{{ route('backstage.questions.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         {{ isset($item) ? method_field('PATCH') : null }}
 
@@ -59,9 +59,9 @@
                         <div class="form-group row mb-3">
                             <label for="tags" class="col-2 col-form-label">标签</label>
                             <div class="col-10">
-                                <select id="tags" name="tags" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="选择标签">
+                                <select id="tags" name="tags[]" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="选择标签">
                                     @forelse($tags as $tag)
-                                        <option value="{{ $tag->id }}" @if(($item->param ?? old('param')) === $tag->id) selected @endif>
+                                        <option value="{{ $tag->id }}" @if(($item->tags ?? old('tags')) === $tag->id) selected @endif>
                                             {{ $tag->name }}
                                         </option>
                                     @empty
@@ -94,7 +94,7 @@
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="param" class="col-2 col-form-label">选项</label>
+                            <label class="col-2 col-form-label">选项</label>
                             <div id="options-container" class="col-10">
                                 <div class="form-row align-items-center" v-for="(option, key) in options">
                                     <div class="col-auto">
@@ -112,18 +112,18 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <input type="text" class="form-control mb-2">
+                                        <input type="text" class="form-control mb-2" v-model="option.body">
                                     </div>
                                     <div class="col-auto">
                                         <button type="button" class="btn btn-danger mb-2" v-on:click="delOption(key)">
                                             删除
                                         </button>
                                     </div>
-                                    <div class="col-auto" v-if="option.is_wrong === false">
+                                    <div class="col-auto" v-if="option.is_right === true">
                                         <button type="button" class="btn btn-success mb-2">正确答案</button>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary" v-on:click="addOption">
+                                <button type="button" class="btn btn-primary" v-on:click="addOption()">
                                     <i class="dripicons-plus"> </i>添加选项
                                 </button>
                             </div>
@@ -153,8 +153,9 @@
 
                         <div class="form-group mb-0 justify-content-end row">
                             <div class="col-10">
-                                <button type="submit" class="btn btn-primary">保存</button>
+                                <button id="submit-button" type="submit" class="btn btn-primary">保存</button>
                                 <a href="javascript:void(0);" class="btn btn-info mx-sm-2">返回</a>
+                                <input type="hidden" id="options" name="options">
                             </div>
                         </div>
                     </form>
@@ -168,7 +169,41 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script type="text/javascript">
         $(function () {
+            // 监听题库类型
             $('.choice-type').click(function () {
+
+            });
+
+            $('#submit-form').submit(function (event) {
+                event.stopPropagation();
+
+                let rightAnswer = app.rightAnswer;
+                if (!rightAnswer) {
+                    swal({
+                        title: '操作失败',
+                        text: '选择一个正确答案',
+                        type: 'error',
+                        showConfirmButton: false
+                    });
+
+                    return false;
+                }
+
+                let options = app.options;
+                options = JSON.parse(JSON.stringify(options));
+                for (let i = 0; i < options.length; i++) {
+                    if (!options[i].body) {
+                        swal({
+                            title: '操作失败',
+                            text: '请填写答案内容',
+                            type: 'error',
+                            showConfirmButton: false
+                        });
+
+                        return false;
+                    }
+                }
+                $('#options').val(JSON.stringify(options));
 
             });
         });
@@ -212,8 +247,9 @@
             methods: {
                 addOption: function () {
                     return this.options.push({
-                        is_wrong: true,
+                        is_right: false,
                         body: "",
+                        code: String.fromCharCode((65 + this.options.length))
                     });
                 },
                 delOption: function (key) {
@@ -222,10 +258,10 @@
                 setAnswerRight: function (key, value) {
                     this.rightAnswer = value;
                     for (let i = 0; i < this.options.length; i++) {
-                        this.options[i].is_wrong = true;
+                        this.options[i].is_right = false;
                     }
 
-                    return this.options[key].is_wrong = false;
+                    return this.options[key].is_right = true;
                 }
             }
         });

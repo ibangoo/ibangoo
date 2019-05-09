@@ -11,6 +11,7 @@
         </a>
         {{-- Sidebar --}}
         <ul class="metismenu side-nav">
+            {{-- 标签管理 --}}
             <li class="side-nav-item {{ is_active_route_group('tags') }}">
                 <a href="javascript: void(0);" class="side-nav-link" aria-expanded="false">
                     <i class="dripicons-copy"> </i>
@@ -25,7 +26,8 @@
                     </li>
                 </ul>
             </li>
-            <li class="side-nav-item">
+            {{-- 题库管理 --}}
+            <li class="side-nav-item {{ is_active_route_group('questions') }}">
                 <a href="javascript: void(0);" class="side-nav-link" aria-expanded="false">
                     <i class="dripicons-copy"> </i>
                     <span> 题库管理 </span>
@@ -33,10 +35,10 @@
                 </a>
                 <ul class="side-nav-second-level collapse" aria-expanded="false">
                     <li>
-                        <a href="javascript:void(0);">题库列表</a>
+                        <a href="{{ route('backstage.questions.index') }}">题库列表</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">手动录入试题</a>
+                        <a href="{{ route('backstage.questions.create') }}">手动录入试题</a>
                     </li>
                     <li>
                         <a href="javascript:void(0);">批量导入试题</a>

@@ -16,7 +16,7 @@ class CreateAnswersTable extends Migration
         Schema::create('answers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('body')->comment('标题');
-            $table->boolean('is_wrong')->comment('是否正确答案');
+            $table->boolean('is_right')->comment('是否正确答案');
             $table->timestamps();
             $table->softDeletes();
         });

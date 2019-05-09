@@ -8,6 +8,5 @@ Route::name('backstage.')->group(function () {
     Route::resource('tags', 'TagController');
 
     // 题库管理
-    Route::get('questions', 'QuestionController@index');
-    Route::get('questions/create', 'QuestionController@create');
+    Route::resource('questions', 'QuestionController');
 });

@@ -21,4 +21,14 @@ class Question extends Model
         self::TYPE_INPUT => '填空题',
         self::TYPE_TEXTAREA => '简答题',
     ];
+
+    /**
+     * 关联标签
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
 }
