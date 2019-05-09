@@ -24,7 +24,7 @@
                     </ol>
                 </div>
                 <h4 class="page-title">
-                    添加试题
+                    添加单选题
                 </h4>
             </div>
         </div>
