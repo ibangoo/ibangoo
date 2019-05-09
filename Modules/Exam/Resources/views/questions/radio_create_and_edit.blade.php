@@ -47,7 +47,7 @@
                                                id="type{{ $key }}"
                                                name="type"
                                                class="custom-control-input choice-type"
-                                               value="{{ $key }}" @if(($item->type ?? old('type')) ?? request('type') === $key) checked @endif
+                                               value="{{ $key }}" @if(($item->type ?? request('type')) === $key) checked @endif
                                                data-href="{{ route('backstage.questions.create', ['type' => $key]) }}"
                                         >
                                         <label class="custom-control-label" for="type{{ $key }}">{{ $type }}</label>
@@ -61,7 +61,7 @@
                             <div class="col-10">
                                 <select id="tags" name="tags[]" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="选择标签">
                                     @forelse($tags as $tag)
-                                        <option value="{{ $tag->id }}" @if(($item->tags ?? old('tags')) === $tag->id) selected @endif>
+                                        <option value="{{ $tag->id }}" @if(in_array((string)$tag->id, old('tags', []), true)) selected @endif>
                                             {{ $tag->name }}
                                         </option>
                                     @empty
@@ -73,7 +73,7 @@
                         <div class="form-group row mb-3">
                             <label for="content" class="col-2 col-form-label">题干</label>
                             <div class="col-10">
-                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容"></textarea>
+                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $item->content ?? old('content')  }}</textarea>
                             </div>
                         </div>
 
@@ -100,10 +100,11 @@
                                         <div class="custom-control custom-radio mb-2">
                                             <input
                                                     type="radio"
-                                                    name="right_answer"
                                                     class="custom-control-input"
+                                                    v-model="rightAnswer"
+                                                    v-on:click="setAnswerRight(key)"
                                                     v-bind:id="'code' + key"
-                                                    v-on:click="setAnswerRight(key, String.fromCharCode((65+key)))"
+                                                    v-bind:value="option.code"
                                             >
                                             <label class="custom-control-label" v-bind:for="'code' + key">
                                                 @{{ String.fromCharCode((65+key)) }}
@@ -131,7 +132,7 @@
                         <div class="form-group row mb-3">
                             <label for="explain" class="col-2 col-form-label">试题解析</label>
                             <div class="col-10">
-                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容"></textarea>
+                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $item->explain ?? old('explain')  }}</textarea>
                             </div>
                         </div>
 
@@ -193,7 +194,6 @@
                 }
 
                 let options = app.options;
-                options = JSON.parse(JSON.stringify(options));
                 for (let i = 0; i < options.length; i++) {
                     if (!options[i].body) {
                         swal({
@@ -206,6 +206,18 @@
                         return false;
                     }
                 }
+
+                if (options.length < 2) {
+                    swal({
+                        title: '操作失败',
+                        text: '至少需要两个答题选项',
+                        type: 'error',
+                        showConfirmButton: false
+                    });
+
+                    return false;
+                }
+
                 $('#options').val(JSON.stringify(options));
                 globalLoading();
             });
@@ -241,31 +253,46 @@
             }
         }
 
-        let app = new Vue({
-            el: '#options-container',
-            data: {
-                options: [],
-                rightAnswer: ""
-            },
-            methods: {
-                addOption: function () {
-                    return this.options.push({
-                        sort: this.options.length,
-                        body: "",
-                    });
-                },
-                delOption: function (key) {
-                    return this.options.splice(key, 1);
-                },
-                setAnswerRight: function (key, value) {
-                    this.rightAnswer = value;
-                    for (let i = 0; i < this.options.length; i++) {
-                        this.options[i].is_right = false;
-                    }
 
-                    return this.options[key].is_right = true;
-                }
+        let oldOptions = [];
+        let oldRightAnswer = "";
+        @if(old('options'))
+            oldOptions = {!! old('options') !!};
+        console.log(oldOptions);
+        for (let i = 0; i < oldOptions.length; i++) {
+            console.log(oldOptions[i].is_right, typeof oldOptions[i].is_right, oldOptions[i].code);
+            if (oldOptions[i].is_right === true) {
+                oldRightAnswer = oldOptions[i].code;
             }
-        });
+        }
+                @endif
+
+        let app = new Vue({
+                el: '#options-container',
+                data: {
+                    options: oldOptions,
+                    rightAnswer: oldRightAnswer
+                },
+                methods: {
+                    addOption: function () {
+                        return this.options.push({
+                            is_right: false,
+                            body: "",
+                            code: String.fromCharCode((65 + this.options.length))
+                        });
+                    },
+                    delOption: function (key) {
+                        return this.options.splice(key, 1);
+                    },
+                    setAnswerRight: function (key) {
+                        for (let i = 0; i < this.options.length; i++) {
+                            this.options[i].is_right = false;
+                        }
+
+                        this.options[key].is_right = true;
+                        this.rightAnswer = this.options[key].code;
+                    }
+                }
+            });
     </script>
 @stop

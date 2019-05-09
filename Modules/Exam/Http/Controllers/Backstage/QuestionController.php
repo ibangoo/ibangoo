@@ -29,13 +29,11 @@ class QuestionController extends Controller
         try {
             $params = get_request_params($request);
 
-            if ($params['content_image']) {
-                $path = $request->file('content_image')->store('images');
-                $params['content_image'] = $path;
+            if (isset($params['content_image'])) {
+                $params['content_image'] = $request->file('content_image')->store('images');
             }
-            if ($params['explain_image']) {
-                $path = $request->file('explain_image')->store('images');
-                $params['explain_image'] = $path;
+            if (isset($params['explain_image'])) {
+                $params['explain_image'] = $request->file('explain_image')->store('images');
             }
 
             // 创建试题
