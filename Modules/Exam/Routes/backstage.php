@@ -1,7 +1,13 @@
 <?php
 
-Route::get('tests', 'TestController@index');
+Route::name('backstage.')->group(function () {
+    // 测试管理
+    Route::get('tests', 'TestController@index');
 
-// 题库列表
-Route::get('questions', 'QuestionController@index');
-Route::get('questions/create', 'QuestionController@create');
+    // 标签管理
+    Route::resource('tags', 'TagController');
+
+    // 题库管理
+    Route::get('questions', 'QuestionController@index');
+    Route::get('questions/create', 'QuestionController@create');
+});

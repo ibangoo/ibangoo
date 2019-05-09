@@ -15,9 +15,8 @@ class CreateTagsTable extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('resource_id')->comment('资源 ID');
-            $table->string('resource_type')->comment('资源类型');
             $table->string('name')->comment('标签名称');
+            $table->boolean('status')->default(false)->comment('是否禁用');
             $table->timestamps();
             $table->softDeletes();
         });

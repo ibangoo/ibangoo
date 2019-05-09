@@ -8,5 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Tag extends Model
 {
     use SoftDeletes;
-    protected $fillable = [];
+    protected $fillable = ['name', 'status'];
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 }

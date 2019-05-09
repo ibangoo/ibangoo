@@ -18,9 +18,9 @@ class CreateQuestionsTable extends Migration
             $table->enum('type', ['radio', 'checkbox', 'boolean', 'input', 'textarea'])->comment('类型：radio=单选，checkbox=多选，boolean=判断，input=填空，textarea=简答');
             $table->text('content')->comment('题干');
             $table->text('content_image')->comment('题干插图');
-            $table->text('options')->default('')->comment('选项');
-            $table->text('explain')->default('')->comment('试题解析');
-            $table->text('explain_image')->default('')->comment('试题解析插图');
+            $table->text('options')->nullable()->comment('选项');
+            $table->text('explain')->nullable()->comment('试题解析');
+            $table->text('explain_image')->nullable()->comment('试题解析插图');
             $table->timestamps();
             $table->softDeletes();
         });

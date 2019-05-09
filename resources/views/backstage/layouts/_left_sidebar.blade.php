@@ -11,21 +11,35 @@
         </a>
         {{-- Sidebar --}}
         <ul class="metismenu side-nav">
-            <li class="side-nav-item">
+            <li class="side-nav-item {{ is_active_route_group('tags') }}">
                 <a href="javascript: void(0);" class="side-nav-link" aria-expanded="false">
-                    <i class="dripicons-copy"></i>
-                    <span> 题库管理 </span>
-                    <span class="menu-arrow"></span>
+                    <i class="dripicons-copy"> </i>
+                    <span> 标签管理 </span>
                 </a>
                 <ul class="side-nav-second-level collapse" aria-expanded="false">
                     <li>
-                        <a href="">题库列表</a>
+                        <a href="{{ route('backstage.tags.index') }}">标签列表</a>
                     </li>
                     <li>
-                        <a href="">手动录入试题</a>
+                        <a href="{{ route('backstage.tags.create') }}">新增标签</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="side-nav-item">
+                <a href="javascript: void(0);" class="side-nav-link" aria-expanded="false">
+                    <i class="dripicons-copy"> </i>
+                    <span> 题库管理 </span>
+                    <span class="menu-arrow"> </span>
+                </a>
+                <ul class="side-nav-second-level collapse" aria-expanded="false">
+                    <li>
+                        <a href="javascript:void(0);">题库列表</a>
                     </li>
                     <li>
-                        <a href="">批量导入试题</a>
+                        <a href="javascript:void(0);">手动录入试题</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);">批量导入试题</a>
                     </li>
                 </ul>
             </li>

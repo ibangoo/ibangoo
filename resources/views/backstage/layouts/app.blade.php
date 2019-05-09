@@ -33,6 +33,47 @@
 @yield('before_app.js')
 <script src="{{ asset('js/app.min.js') }}"></script>
 <script src="{{ asset('js/vendor/sweetalert2.min.js') }}"></script>
+<script>
+    @if(session()->has('success'))
+    swal({
+        title: '操作成功',
+        text: '{{session()->get('success')}}',
+        type: 'success',
+        timer: 3000,
+        showConfirmButton: false
+    });
+    @endif
+
+    @if(session()->has('errors'))
+    swal({
+        title: '操作失败',
+        text: '{{implode('  ', $errors->all())}}',
+        type: 'error',
+        showConfirmButton: false
+    });
+
+    @endif
+
+    function confirmDelete() {
+        swal({title: '是否确定删除？', showCancelButton: true}).then((res) => {
+            if (res.value) $(this).parent().submit()
+        });
+    }
+
+    let loadingElement = '<div class="card-disabled"><div class="card-portlets-loader"></div></div>';
+    $('ul.pagination li.page-item').click(function () {
+        if ($(this).hasClass('active') || $(this).hasClass('disabled')) {
+            return;
+        }
+
+        let cardElement = $(this).parents('.card');
+        cardElement.append(loadingElement);
+    });
+
+    function globalLoading() {
+        $('#app').append(loadingElement);
+    }
+</script>
 @yield('after_app_js')
 </body>
 </html>
