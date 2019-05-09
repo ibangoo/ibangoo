@@ -172,6 +172,7 @@
             let type = "{{ request('type', 'radio') }}";
             $('.choice-type').click(function (event) {
                 if (type !== event.target.value) {
+                    globalLoading();
                     window.location.href = $(this).data('href');
                 }
             });
@@ -206,7 +207,7 @@
                     }
                 }
                 $('#options').val(JSON.stringify(options));
-
+                globalLoading();
             });
         });
 
@@ -249,9 +250,8 @@
             methods: {
                 addOption: function () {
                     return this.options.push({
-                        is_right: false,
+                        sort: this.options.length,
                         body: "",
-                        code: String.fromCharCode((65 + this.options.length))
                     });
                 },
                 delOption: function (key) {
