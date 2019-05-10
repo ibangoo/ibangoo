@@ -131,8 +131,8 @@
                         </div>
                         <div class="card-footer" style=" display: flex; justify-content: flex-end;align-items: center;">
                             <span class="mr-2">标签：{{ $question->tags_to_string }}</span>
-                            <a href="javascript: void(0);" class="card-link text-custom btn btn-primary mr-2">编辑</a>
-                            <form style="display: inline;" action="{{ route('backstage.questions.destroy', $tag) }}" method="POST">
+                            <a href="{{ route('backstage.questions.edit', ['question' => $question, 'type' => $question->type]) }}" class="card-link text-custom btn btn-primary mr-2">编辑</a>
+                            <form style="display: inline;" action="{{ route('backstage.questions.destroy',$question) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <a href="javascript:void(0);"

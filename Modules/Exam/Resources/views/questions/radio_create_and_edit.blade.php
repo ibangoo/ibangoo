@@ -34,9 +34,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <form id="submit-form" action="{{ route('backstage.questions.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+                    <form id="submit-form" action="{{ isset($question) ? route('backstage.questions.update', $question) :route('backstage.questions.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
-                        {{ isset($item) ? method_field('PATCH') : null }}
+                        {{ isset($question) ? method_field('PATCH') : null }}
 
                         <div class="form-group row mb-3">
                             <label for="type" class="col-2 col-form-label">类型</label>
@@ -47,7 +47,7 @@
                                                id="type{{ $key }}"
                                                name="type"
                                                class="custom-control-input choice-type"
-                                               value="{{ $key }}" @if(($item->type ?? request('type')) === $key) checked @endif
+                                               value="{{ $key }}" @if(($question->type ?? request('type')) === $key) checked @endif
                                                data-href="{{ route('backstage.questions.create', ['type' => $key]) }}"
                                         >
                                         <label class="custom-control-label" for="type{{ $key }}">{{ $type }}</label>
@@ -61,9 +61,15 @@
                             <div class="col-10">
                                 <select id="tags" name="tags[]" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="选择标签">
                                     @forelse($tags as $tag)
-                                        <option value="{{ $tag->id }}" @if(in_array((string)$tag->id, old('tags', []), true)) selected @endif>
-                                            {{ $tag->name }}
-                                        </option>
+                                        @if(isset($question))
+                                            <option value="{{ $tag->id }}" @if(in_array($tag->id, $question->tags->pluck('id')->toArray())) selected @endif>
+                                                {{ $tag->name }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $tag->id }}" @if(in_array($tag->id, old('tags', []))) selected @endif>
+                                                {{ $tag->name }}
+                                            </option>
+                                        @endif
                                     @empty
                                     @endforelse
                                 </select>
@@ -73,7 +79,7 @@
                         <div class="form-group row mb-3">
                             <label for="content" class="col-2 col-form-label">题干</label>
                             <div class="col-10">
-                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $item->content ?? old('content')  }}</textarea>
+                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? old('content')  }}</textarea>
                             </div>
                         </div>
 
@@ -81,11 +87,20 @@
                             <label for="content_image" class="col-2 col-form-label">题干插图</label>
                             <div class="col-10">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="content_image" name="content_image" onchange="handleImages(this.files, 'content-image-preview')">
+                                    <input type="file"
+                                           class="custom-file-input"
+                                           id="content_image"
+                                           name="content_image"
+                                           onchange="handleImages(this.files, 'content-image-preview')"
+                                           value="{{ isset($question) ? $question->content_image : null }}"
+                                    >
                                     <label class="custom-file-label" for="content_image">点击上传图片</label>
                                 </div>
-                                <div id="content-image-preview" class="card d-block" style="display: none; margin-bottom: 0">
-                                    <div class="card-img-overlay" style="display: none;">
+                                <div id="content-image-preview" class="card d-block" style="margin-bottom: 0">
+                                    @if(isset($question) && $question->content_image)
+                                        <img class="content-image-preview-image" src="{{ Storage::url($question->content_image) }}" alt="{{ $question->content }}">
+                                    @endif
+                                    <div class="card-img-overlay">
                                         <div class="badge badge-secondary p-1" style="display: none;">预览</div>
                                     </div>
                                 </div>
@@ -132,7 +147,7 @@
                         <div class="form-group row mb-3">
                             <label for="explain" class="col-2 col-form-label">试题解析</label>
                             <div class="col-10">
-                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $item->explain ?? old('explain')  }}</textarea>
+                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? old('explain')  }}</textarea>
                             </div>
                         </div>
 
@@ -140,11 +155,19 @@
                             <label for="explain_image" class="col-2 col-form-label">解析插图</label>
                             <div class="col-10">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="explain_image" name="explain_image" onchange="handleImages(this.files, 'explain-image-preview')">
+                                    <input type="file"
+                                           class="custom-file-input"
+                                           id="explain_image"
+                                           name="explain_image"
+                                           onchange="handleImages(this.files, 'explain-image-preview')"
+                                    >
                                     <label class="custom-file-label" for="explain_image">点击上传图片</label>
                                 </div>
-                                <div id="explain-image-preview" class="card d-block" style="display: none; margin-bottom: 0">
-                                    <div class="card-img-overlay" style="display: none;">
+                                <div id="explain-image-preview" class="card d-block" style="margin-bottom: 0">
+                                    @if(isset($question) && $question->explain_image)
+                                        <img class="explain-image-preview-image" src="{{ Storage::url($question->explain_image) }}" alt="{{ $question->explain }}">
+                                    @endif
+                                    <div class="card-img-overlay">
                                         <div class="badge badge-secondary p-1" style="display: none;">预览</div>
                                     </div>
                                 </div>
@@ -258,6 +281,15 @@
         let oldRightAnswer = "";
         @if(old('options'))
             oldOptions = {!! old('options') !!};
+            for (let i = 0; i < oldOptions.length; i++) {
+                if (oldOptions[i].is_right === true) {
+                    oldRightAnswer = oldOptions[i].code;
+                }
+            }
+        @endif
+
+        @if(isset($question))
+            oldOptions = {!! $question->options !!};
             for (let i = 0; i < oldOptions.length; i++) {
                 if (oldOptions[i].is_right === true) {
                     oldRightAnswer = oldOptions[i].code;

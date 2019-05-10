@@ -55,10 +55,10 @@ class QuestionController extends Controller
             $params = get_request_params($request);
 
             if (isset($params['content_image'])) {
-                $params['content_image'] = $request->file('content_image')->store('images');
+                $params['content_image'] = $request->file('content_image')->store('public/uploads');
             }
             if (isset($params['explain_image'])) {
-                $params['explain_image'] = $request->file('explain_image')->store('images');
+                $params['explain_image'] = $request->file('explain_image')->store('public/uploads');
             }
 
             // 创建试题
@@ -83,6 +83,42 @@ class QuestionController extends Controller
         DB::commit();
 
         return $this->redirectRouteWithSuccess('创建试题成功', 'backstage.questions.index');
+    }
+
+    public function edit(Question $question, Request $request)
+    {
+        $tags = Tag::query()->where('status', true)->get();
+
+        return view('exam::questions.'.$request->type.'_create_and_edit', compact('tags', 'question'));
+    }
+
+    public function update(Question $question, QuestionRequest $request)
+    {
+        DB::beginTransaction();
+        try {
+            $params = get_request_params($request);
+            if (isset($params['content_image'])) {
+                $params['content_image'] = $request->file('content_image')->store('public/uploads');
+            }
+            if (isset($params['explain_image'])) {
+                $params['explain_image'] = $request->file('explain_image')->store('public/uploads');
+            }
+
+            // 创建试题
+           $question->update(array_filter($params));
+
+            // 关联标签
+            $question->tags()->sync($params['tags']);
+
+        } catch (\Throwable $throwable) {
+            DB::rollback();
+
+            return $this->redirectBackWithErrors($throwable->getMessage());
+        }
+
+        DB::commit();
+
+        return $this->redirectBackWithSuccess('编辑试题成功');
     }
 
     public function destroy(Question $question)

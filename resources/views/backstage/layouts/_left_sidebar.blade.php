@@ -34,10 +34,10 @@
                     <span class="menu-arrow"> </span>
                 </a>
                 <ul class="side-nav-second-level collapse" aria-expanded="false">
-                    <li>
+                    <li class="{{ Route::currentRouteName() === 'backstage.questions.index' ? 'active' : null }}">
                         <a href="{{ route('backstage.questions.index') }}">题库列表</a>
                     </li>
-                    <li>
+                    <li class="{{ Route::currentRouteName() === 'backstage.questions.create' ? 'active' : null }}">
                         <a href="{{ route('backstage.questions.create', ['type' => 'radio']) }}">手动录入试题</a>
                     </li>
                     <li>

@@ -3,6 +3,7 @@
 namespace Modules\Exam\Http\Requests\Backstage;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route;
 
 class QuestionRequest extends FormRequest
 {
@@ -13,15 +14,33 @@ class QuestionRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'type' => ['required'],
-            'tags' => ['required'],
-            'content' => ['required', 'string'],
-            'content_image' => ['required', 'image'],
-            'options' => ['nullable', 'string'],
-            'explain' => ['nullable'],
-            'explain_image' => ['nullable', 'image'],
-        ];
+        $rules = [];
+        switch ($this->route()->getName()) {
+            case 'backstage.questions.store':
+                $rules = [
+                    'type' => ['required'],
+                    'tags' => ['required'],
+                    'content' => ['required', 'string'],
+                    'content_image' => ['required', 'image'],
+                    'options' => ['nullable', 'string'],
+                    'explain' => ['nullable'],
+                    'explain_image' => ['nullable', 'image'],
+                ];
+                break;
+            case  'backstage.questions.update':
+                $rules = [
+                    'type' => ['nullable'],
+                    'tags' => ['nullable'],
+                    'content' => ['nullable', 'string'],
+                    'content_image' => ['nullable', 'image'],
+                    'options' => ['nullable', 'string'],
+                    'explain' => ['nullable'],
+                    'explain_image' => ['nullable', 'image'],
+                ];
+                break;
+        }
+
+        return $rules;
     }
 
     public function attributes()
