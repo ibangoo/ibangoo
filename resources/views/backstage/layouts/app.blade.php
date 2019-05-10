@@ -51,13 +51,19 @@
         type: 'error',
         showConfirmButton: false
     });
-
     @endif
 
-    function confirmDelete() {
-        swal({title: '是否确定删除？', showCancelButton: true}).then((res) => {
-            if (res.value) $(this).parent().submit()
+    function alertError(message){
+        swal({
+            title: '操作失败',
+            text: message,
+            type: 'error',
+            showConfirmButton: false
         });
+    }
+
+    function confirmDelete() {
+        swal({title: '是否确定删除？', showCancelButton: true}).then((res) => {if (res.value) $(this).parent().submit()});
     }
 
     let loadingElement = '<div class="card-disabled"><div class="card-portlets-loader"></div></div>';
@@ -70,8 +76,16 @@
         cardElement.append(loadingElement);
     });
 
+    function loading(mount) {
+        mount.parents('.card').append(loadingElement);
+    }
+
     function globalLoading() {
         $('#app').append(loadingElement);
+    }
+
+    function cleanLoading() {
+        $('.card-disabled').remove();
     }
 </script>
 @yield('after_app_js')

@@ -13,7 +13,32 @@ class QuestionController extends Controller
 {
     public function index(Request $request)
     {
-        return view('exam::questions.index');
+        $tags = Tag::query()
+            ->where('status', true)
+            ->get();
+
+        $questions = Question::query()
+            ->with(['tags'])
+            ->when($request->type, function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
+            ->when($request->get('content'), function ($query) use ($request) {
+                return $query->where('content', 'like', '%'.$request->get('content').'%');
+            })
+            ->when($request->get('created_at'), function ($query) use ($request) {
+                if ($request->created_at[0] && $request->created_at[1]) {
+                    return $query->whereBetween('created_at', $request->created_at);
+                }
+            })
+            ->when($request->get('tags'), function ($query) use ($request) {
+                return $query->whereHas('tags', function ($subQuery) use ($request) {
+                    return $subQuery->whereIn('id', $request->tags);
+                });
+            })
+            ->latest()
+            ->paginate(config('modules.paginator.per_page'));
+
+        return view('exam::questions.index', compact('questions', 'tags'));
     }
 
     public function create(Request $request)
@@ -58,5 +83,19 @@ class QuestionController extends Controller
         DB::commit();
 
         return $this->redirectRouteWithSuccess('创建试题成功', 'backstage.questions.index');
+    }
+
+    public function destroy(Question $question)
+    {
+        $question->delete();
+
+        return $this->redirectBackWithSuccess('删除试题成功');
+    }
+
+    public function batchDestroy(Request $request)
+    {
+        Question::query()->whereIn('id', json_decode($request->ids, true))->delete();
+
+        return $this->redirectBackWithSuccess('批量删除试题成功');
     }
 }

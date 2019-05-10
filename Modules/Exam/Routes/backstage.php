@@ -9,4 +9,5 @@ Route::name('backstage.')->group(function () {
 
     // 题库管理
     Route::resource('questions', 'QuestionController');
+    Route::post('questions/batch-destroy', 'QuestionController@batchDestroy')->name('questions.batch_destroy');
 });

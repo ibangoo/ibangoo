@@ -88,7 +88,7 @@
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-sm-12 col-md-7">
-                                {{ $tags->links() }}
+                                {{ $tags->appends(request()->all())->links() }}
                             </div>
                         </div>
                     </div>

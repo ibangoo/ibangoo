@@ -12,4 +12,14 @@ class Tag extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    /**
+     * 获取标签对应的所有试题
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function questions()
+    {
+        return $this->morphedByMany(Question::class, 'taggable');
+    }
 }

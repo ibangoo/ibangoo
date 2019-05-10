@@ -23,6 +23,26 @@ class Question extends Model
     ];
 
     /**
+     * 获取试题类型名称
+     *
+     * @return mixed
+     */
+    public function getTypeNameAttribute()
+    {
+        return self::$typeMap[$this->type];
+    }
+
+    /**
+     * 获取所有标签名称
+     *
+     * @return string
+     */
+    public function getTagsToStringAttribute()
+    {
+        return implode('、', $this->tags->pluck('name')->toArray());
+    }
+
+    /**
      * 关联标签
      *
      * @return \Illuminate\Database\Eloquent\Relations\MorphToMany

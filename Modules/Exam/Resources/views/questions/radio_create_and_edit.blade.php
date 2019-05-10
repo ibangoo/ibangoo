@@ -166,7 +166,7 @@
 @endsection
 
 @section('after_app_js')
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="{{ asset('js/vendor/vue.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             // 监听题库类型
@@ -258,14 +258,12 @@
         let oldRightAnswer = "";
         @if(old('options'))
             oldOptions = {!! old('options') !!};
-        console.log(oldOptions);
-        for (let i = 0; i < oldOptions.length; i++) {
-            console.log(oldOptions[i].is_right, typeof oldOptions[i].is_right, oldOptions[i].code);
-            if (oldOptions[i].is_right === true) {
-                oldRightAnswer = oldOptions[i].code;
+            for (let i = 0; i < oldOptions.length; i++) {
+                if (oldOptions[i].is_right === true) {
+                    oldRightAnswer = oldOptions[i].code;
+                }
             }
-        }
-                @endif
+        @endif
 
         let app = new Vue({
                 el: '#options-container',

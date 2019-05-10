@@ -47,7 +47,7 @@
                                                id="type{{ $key }}"
                                                name="type"
                                                class="custom-control-input choice-type"
-                                               value="{{ $key }}" @if(($item->type ?? old('type')) ?? request('type') === $key) checked @endif
+                                               value="{{ $key }}" @if(($item->type ?? request('type')) === $key) checked @endif
                                                data-href="{{ route('backstage.questions.create', ['type' => $key]) }}"
                                         >
                                         <label class="custom-control-label" for="type{{ $key }}">{{ $type }}</label>
@@ -165,13 +165,14 @@
 @endsection
 
 @section('after_app_js')
-    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="{{ asset('js/vendor/vue.js') }}"></script>
     <script type="text/javascript">
         $(function () {
             // 监听题库类型
             let type = "{{ request('type', 'radio') }}";
             $('.choice-type').click(function (event) {
                 if (type !== event.target.value) {
+                    globalLoading();
                     window.location.href = $(this).data('href');
                 }
             });
