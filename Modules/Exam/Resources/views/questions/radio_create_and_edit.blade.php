@@ -9,6 +9,7 @@
 
         .explain-image-preview-image {
             width: 50%;
+            max-width: 500px;
         }
     </style>
 @stop
@@ -31,7 +32,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
                     <form id="submit-form" action="{{ isset($question) ? route('backstage.questions.update', $question) :route('backstage.questions.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
