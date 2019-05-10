@@ -153,7 +153,9 @@
                         <div class="form-group mb-0 justify-content-end row">
                             <div class="col-10">
                                 <button id="submit-button" type="submit" class="btn btn-primary">保存</button>
-                                <a href="javascript:window.location.reload();" class="btn btn-info mx-sm-2">重置</a>
+                                @if(!isset($question))
+                                    <a href="javascript:window.location.reload();" class="btn btn-info mx-sm-2">重置</a>
+                                @endif
                                 <input type="hidden" id="options" name="options">
                             </div>
                         </div>
