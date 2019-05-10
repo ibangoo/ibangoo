@@ -85,7 +85,7 @@
                         <div class="form-group row mb-3">
                             <label for="content" class="col-2 col-form-label">题干</label>
                             <div class="col-10">
-                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content }}</textarea>
+                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? null }}</textarea>
                             </div>
                         </div>
 
@@ -148,7 +148,7 @@
                         <div class="form-group row mb-3">
                             <label for="explain" class="col-2 col-form-label">试题解析</label>
                             <div class="col-10">
-                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain }}</textarea>
+                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? null }}</textarea>
                             </div>
                         </div>
 
