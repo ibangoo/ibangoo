@@ -19,6 +19,8 @@ class CreateTestsTable extends Migration
             $table->unsignedMediumInteger('total_score')->comment('测试总分');
             $table->text('options')->comment('测试选项');
             $table->enum('mode', ['tag', 'question'])->comment('测试出题类型：tag=标签出题、question=题库选题');
+            $table->boolean('status')->default(false)->comment('是否禁用');
+            $table->boolean('is_auto')->default(true)->comment('是否系统判断');
             $table->timestamps();
             $table->softDeletes();
         });

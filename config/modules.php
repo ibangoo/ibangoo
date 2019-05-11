@@ -187,6 +187,6 @@ return [
     ],
 
     'paginator' => [
-        'per_page' => 5,
+        'per_page' => 10,
     ],
 ];

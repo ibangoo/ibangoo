@@ -172,11 +172,16 @@
             oldOptions = {!! old('options') !!};
         @endif
 
+        @if(isset($test) && !empty($test->options)){
+            oldOptions = {!! $test->options !!}
+        }
+        @endif
+
         let app = new Vue({
             el: '#app',
             data: {
-                mode: 'tag',
-                totalScore: null,
+                mode: '{{ $test->mode ?? 'tag'}}',
+                totalScore: {{ $test->total_score ?? null }},
                 options: oldOptions,
                 types: {
                     radio: '单选题',

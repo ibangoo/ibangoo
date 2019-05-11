@@ -103,11 +103,11 @@ class QuestionController extends Controller
                 $params['explain_image'] = $request->file('explain_image')->store('public/uploads');
             }
 
-            // 创建试题
+            // 修改试题
            $question->update(array_filter($params));
 
             // 关联标签
-            $question->tags()->sync($params['tags']);
+            $question->tags()->sync($params['tags'] ?? []);
 
         } catch (\Throwable $throwable) {
             DB::rollback();

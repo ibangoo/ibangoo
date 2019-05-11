@@ -13,7 +13,24 @@ class Test extends Model
         'total_score',
         'options',
         'mode',
+        'is_auto',
+        'status'
     ];
+
+    public function getModeNameAttribute()
+    {
+        return $this->mode === 'tag' ? '标签选题' : '题库选题';
+    }
+
+    public function getIsAutoLabelAttribute()
+    {
+        return $this->is_auto ? '系统判卷' : '人工判卷';
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return $this->status ? '启用中' : '禁用中';
+    }
 
     /**
      * 关联标签

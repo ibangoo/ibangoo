@@ -2,6 +2,7 @@
 
 Route::name('backstage.')->group(function () {
     // 测试管理
+    Route::patch('tests/{test}/change-status', 'TestController@changeStatus')->name('tests.change_status');
     Route::resource('tests', 'TestController');
 
     // 标签管理

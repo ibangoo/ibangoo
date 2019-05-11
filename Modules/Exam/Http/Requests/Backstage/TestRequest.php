@@ -13,13 +13,26 @@ class TestRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => ['required', 'string'],
-            'total_score' => ['required', 'integer'],
-            'options' => ['required', 'string'],
-            'mode' => ['required', 'string'],
-            'tags' => ['nullable']
-        ];
+        switch ($this->route()->getName()) {
+            case 'backstage.tests.store':
+                return [
+                    'name' => ['required', 'string'],
+                    'total_score' => ['required', 'integer'],
+                    'options' => ['required', 'string'],
+                    'mode' => ['required', 'string'],
+                    'tags' => ['nullable']
+                ];
+                break;
+            case 'backstage.tests.update':
+                return [
+                    'name' => ['nullable', 'string'],
+                    'total_score' => ['nullable', 'integer'],
+                    'options' => ['nullable', 'string'],
+                    'mode' => ['nullable', 'string'],
+                    'tags' => ['nullable']
+                ];
+                break;
+        }
     }
 
     public function attributes()
