@@ -162,8 +162,9 @@
         </div>
     </div>
 
-    <form id="batch-delete-form" method="POST" action="{{ route('backstage.questions.batch_destroy') }}" style="display: inline;">
+    <form id="batch-delete-form" method="POST" action="{{ route('backstage.questions.batch_destroy') }}" style="display: none;">
         {{ csrf_field() }}
+        {{ method_field('DELETE') }}
         <input type="hidden" name="ids">
     </form>
 @stop

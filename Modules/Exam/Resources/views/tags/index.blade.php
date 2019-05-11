@@ -57,7 +57,10 @@
                                             <form style="display: inline;" action="{{ route('backstage.tags.destroy', $tag) }}" method="POST">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
-                                                <a href="javascript:void(0);" onclick="confirmDelete()" class="btn btn-danger">
+                                                <a href="javascript:void(0);"
+                                                   class="btn btn-danger"
+                                                   onclick="swal({title: '是否确定删除？', showCancelButton: true}).then((res) => {if (res.value) $(this).parent().submit()});"
+                                                >
                                                     删除
                                                 </a>
                                             </form>

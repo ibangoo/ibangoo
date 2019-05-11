@@ -50,10 +50,8 @@ class QuestionController extends Controller
 
     public function store(QuestionRequest $request)
     {
-        DB::beginTransaction();
         try {
             $params = get_request_params($request);
-
             if (isset($params['content_image'])) {
                 $params['content_image'] = $request->file('content_image')->store('public/uploads');
             }
@@ -62,6 +60,7 @@ class QuestionController extends Controller
             }
 
             // 创建试题
+            DB::beginTransaction();
             $question = Question::query()->create([
                 'type' => $params['type'],
                 'content' => $params['content'],

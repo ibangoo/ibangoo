@@ -16,8 +16,9 @@
                 <a href="javascript: void(0);" class="side-nav-link" aria-expanded="false">
                     <i class="dripicons-copy"> </i>
                     <span> 标签管理 </span>
+                    <span class="menu-arrow"> </span>
                 </a>
-                <ul class="side-nav-second-level collapse" aria-expanded="false">
+                <ul class="side-nav-second-level" aria-expanded="false">
                     <li>
                         <a href="{{ route('backstage.tags.index') }}">标签列表</a>
                     </li>
@@ -33,7 +34,7 @@
                     <span> 题库管理 </span>
                     <span class="menu-arrow"> </span>
                 </a>
-                <ul class="side-nav-second-level collapse" aria-expanded="false">
+                <ul class="side-nav-second-level" aria-expanded="false">
                     <li class="{{ Route::currentRouteName() === 'backstage.questions.index' ? 'active' : null }}">
                         <a href="{{ route('backstage.questions.index') }}">题库列表</a>
                     </li>
@@ -41,25 +42,25 @@
                         <a href="{{ route('backstage.questions.create', ['type' => 'radio']) }}">手动录入试题</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">批量导入试题</a>
+                        <a href="#">批量导入试题</a>
                     </li>
                 </ul>
             </li>
-            <li class="side-nav-item">
+            <li class="side-nav-item {{ is_active_route_group('tests') }}">
                 <a href="javascript:void(0);" class="side-nav-link" aria-expanded="false">
-                    <i class="dripicons-document"></i>
+                    <i class="dripicons-document"> </i>
                     <span> 测试管理 </span>
-                    <span class="menu-arrow"></span>
+                    <span class="menu-arrow"> </span>
                 </a>
-                <ul class="side-nav-second-level collapse" aria-expanded="false">
+                <ul class="side-nav-second-level" aria-expanded="false">
                     <li>
-                        <a href="javascript:void(0);">测试列表</a>
+                        <a href="{{ route('backstage.tests.index') }}">测试列表</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">新增测试试卷</a>
+                        <a href="{{ route('backstage.tests.create') }}">新增测试试卷</a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);">已提交试卷</a>
+                        <a href="#">已提交试卷</a>
                     </li>
                 </ul>
             </li>
