@@ -119,8 +119,31 @@ class TestController extends Controller
         return $this->redirectBackWithSuccess('修改测试成功');
     }
 
-    public function questions()
+    public function questions(Test $test, Request $request)
     {
-        
+        $tags = Tag::query()->where('status', true)->get();
+
+        $questions = $test->questions()
+            ->with(['tags'])
+            ->when($request->type, function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
+            ->when($request->get('content'), function ($query) use ($request) {
+                return $query->where('content', 'like', '%'.$request->get('content').'%');
+            })
+            ->when($request->get('created_at'), function ($query) use ($request) {
+                if ($request->created_at[0] && $request->created_at[1]) {
+                    return $query->whereBetween('created_at', $request->created_at);
+                }
+            })
+            ->when($request->get('tags'), function ($query) use ($request) {
+                return $query->whereHas('tags', function ($subQuery) use ($request) {
+                    return $subQuery->whereIn('id', $request->tags);
+                });
+            })
+            ->latest()
+            ->get();
+
+        return view('exam::tests.questions', compact('tags', 'test', 'questions'));
     }
 }
