@@ -51,4 +51,9 @@ class Test extends Model
     {
         return $this->morphToMany(Question::class, 'questionable');
     }
+
+    public function questionables()
+    {
+        return $this->hasMany(Questionable::class, 'questionable_id');
+    }
 }

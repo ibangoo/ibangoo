@@ -121,7 +121,6 @@ class TestController extends Controller
     public function questions(Test $test, Request $request)
     {
         $tags = Tag::query()->where('status', true)->get();
-
         $questions = $test->questions()
             ->with(['tags'])
             ->when($request->type, function ($query) use ($request) {
@@ -142,6 +141,16 @@ class TestController extends Controller
             })
             ->latest()
             ->get();
+
+        // 组合排序
+        $questionables = $test->questionables;
+        $questions->map(function ($item) use ($questionables) {
+            foreach ($questionables as $questionable) {
+                if ($questionable->question_id === $item->id) {
+                    $item->sort = $questionable->sort;
+                }
+            }
+        });
 
         return view('exam::tests.questions', compact('tags', 'test', 'questions'));
     }
@@ -188,5 +197,37 @@ class TestController extends Controller
         $test->questions()->detach(is_string($request->ids) ? json_decode($request->ids, true) : $request->ids);
 
         return $this->redirectBackWithSuccess('删除试题成功');
+    }
+
+    public function sortQuestions(Test $test, Request $request)
+    {
+        $data = [];
+        $sort = json_decode($request->sort, true);
+        foreach ($sort as $item) {
+            $data[$item['question_id']] = [
+                'sort' => $item['sort'],
+            ];
+        }
+
+        $test->questions()->sync($data);
+
+        return $this->redirectBackWithSuccess('排序成功');
+    }
+
+    public function dragQuestions(Test $test)
+    {
+        $questions = $test->questions;
+
+        // 组合排序
+        $questionables = $test->questionables;
+        $questions->map(function ($item) use ($questionables) {
+            foreach ($questionables as $questionable) {
+                if ($questionable->question_id === $item->id) {
+                    $item->sort = $questionable->sort;
+                }
+            }
+        });
+
+        return view('exam::tests.drag_questions', compact('test', 'questions'));
     }
 }

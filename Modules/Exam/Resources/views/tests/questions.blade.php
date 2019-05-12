@@ -17,10 +17,11 @@
     </div>
 
     <div class="row">
-            <div class="col-md-4 mb-2"><h3>试卷：{{ $test->name }}</h3></div>
-            <div class="col-md-8 mb-2 text-md-right">
-                <a href="{{ route('backstage.tests.search_questions', $test) }}" class="btn btn-danger">添加试题</a>
-            </div>
+        <div class="col-md-4 mb-2"><h3>试卷：{{ $test->name }}</h3></div>
+        <div class="col-md-8 mb-2 text-md-right">
+            <a href="{{ route('backstage.tests.search_questions', $test) }}" class="btn btn-danger ml-2">添加试题</a>
+            <a href="{{ route('backstage.tests.drag_questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
+        </div>
     </div>
 
     <div class="row">
@@ -29,7 +30,7 @@
                 <div class="card-body" style="padding-bottom: 0;">
                     <div class="row mb-2">
                         <div class="col-lg-12">
-                            <form id="search-form" class="form-inline" action="{{ route('backstage.questions.index') }}">
+                            <form id="search-form" class="form-inline" action="{{ route('backstage.tests.questions', $test) }}">
                                 {{-- 试题类型 --}}
                                 <div class="form-group mr-3 mb-2">
                                     <label for="type-select" class="mr-2">试题类型</label>
@@ -106,7 +107,7 @@
         </div>
 
         <div class="row">
-            @foreach($questions as $question)
+            @foreach($questions->sortBy('sort') as $question)
                 <div class="col-md-6">
                     <div class="card d-block">
                         <div class="card-header">
@@ -114,7 +115,7 @@
                             <span class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input question-checkbox" id="customCheck{{ $question->id }}" value="{{ $question->id }}">
                                 <label class="custom-control-label" for="customCheck{{ $question->id }}" style="line-height: 20px">
-                                    {{ $question->id }}、
+                                    {{ $question->sort }}、
                                     <span class="badge badge-{{ get_type_name_color($question->type) }}">{{ $question->type_name }}</span>
                                     &nbsp;
                                     {{ $question->content }}
