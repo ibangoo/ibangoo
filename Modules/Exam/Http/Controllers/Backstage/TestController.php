@@ -12,6 +12,13 @@ use Modules\Exam\Http\Requests\Backstage\TestRequest;
 
 class TestController extends Controller
 {
+    /**
+     * 测试列表
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index(Request $request)
     {
         $tests = Test::query()
@@ -21,6 +28,11 @@ class TestController extends Controller
         return view('exam::tests.index', compact('tests'));
     }
 
+    /**
+     * 测试创建页面
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         $tags = Tag::query()->where('status', true)->get();
@@ -28,6 +40,13 @@ class TestController extends Controller
         return view('exam::tests.create_and_edit', compact('tags'));
     }
 
+    /**
+     * 测试创建操作
+     *
+     * @param TestRequest $request
+     *
+     * @return mixed
+     */
     public function store(TestRequest $request)
     {
         $params = get_request_params($request);
@@ -70,6 +89,13 @@ class TestController extends Controller
         return $this->redirectRouteWithSuccess('创建测试成功', 'backstage.tests.index');
     }
 
+    /**
+     * 测试修改状态
+     *
+     * @param Test $test
+     *
+     * @return mixed
+     */
     public function changeStatus(Test $test)
     {
         $test->update(['status' => (int)!$test->status]);
@@ -77,6 +103,13 @@ class TestController extends Controller
         return $this->redirectBackWithSuccess('修改状态成功');
     }
 
+    /**
+     * 测试编辑页面
+     *
+     * @param Test $test
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function edit(Test $test)
     {
         $tags = Tag::query()->where('status', true)->get();
@@ -84,6 +117,14 @@ class TestController extends Controller
         return view('exam::tests.create_and_edit', compact('tags', 'test'));
     }
 
+    /**
+     * 测试更新操作
+     *
+     * @param Test        $test
+     * @param TestRequest $request
+     *
+     * @return mixed
+     */
     public function update(Test $test, TestRequest $request)
     {
         $params = get_request_params($request);
@@ -118,6 +159,14 @@ class TestController extends Controller
         return $this->redirectBackWithSuccess('修改测试成功');
     }
 
+    /**
+     * 测试关联试题
+     *
+     * @param Test    $test
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function questions(Test $test, Request $request)
     {
         $tags = Tag::query()->where('status', true)->get();
@@ -155,6 +204,14 @@ class TestController extends Controller
         return view('exam::tests.questions', compact('tags', 'test', 'questions'));
     }
 
+    /**
+     * 测试添加试题页面
+     *
+     * @param Test    $test
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function searchQuestions(Test $test, Request $request)
     {
         $tags = Tag::query()
@@ -185,6 +242,14 @@ class TestController extends Controller
         return view('exam::tests.search_questions', compact('test', 'tags', 'questions'));
     }
 
+    /**
+     * 测试关联试题操作
+     *
+     * @param Test    $test
+     * @param Request $request
+     *
+     * @return mixed
+     */
     public function attachQuestions(Test $test, Request $request)
     {
         $test->questions()->attach(json_decode($request->ids, true));
@@ -192,6 +257,14 @@ class TestController extends Controller
         return $this->redirectBackWithSuccess('添加试题成功');
     }
 
+    /**
+     * 测试删除试题操作
+     *
+     * @param Test    $test
+     * @param Request $request
+     *
+     * @return mixed
+     */
     public function detachQuestions(Test $test, Request $request)
     {
         $test->questions()->detach(is_string($request->ids) ? json_decode($request->ids, true) : $request->ids);
@@ -199,6 +272,14 @@ class TestController extends Controller
         return $this->redirectBackWithSuccess('删除试题成功');
     }
 
+    /**
+     * 测试试题排序
+     *
+     * @param Test    $test
+     * @param Request $request
+     *
+     * @return mixed
+     */
     public function sortQuestions(Test $test, Request $request)
     {
         $data = [];
@@ -214,6 +295,13 @@ class TestController extends Controller
         return $this->redirectBackWithSuccess('排序成功');
     }
 
+    /**
+     * 测试试题拖拽
+     *
+     * @param Test $test
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function dragQuestions(Test $test)
     {
         $questions = $test->questions;
