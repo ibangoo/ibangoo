@@ -117,6 +117,7 @@
                                        class="custom-control-input question-checkbox" 
                                        id="customCheck{{ $question->id }}" 
                                        value="{{ $question->id }}"
+                                       data-type="{{ $question->type }}"
                                        @if (in_array($question->id, $test->questions->pluck('id')->toArray(), true))
                                            checked
                                        @endif
@@ -167,7 +168,7 @@
 
     <form id="submit-form" method="POST" action="{{ route('backstage.tests.attach_questions', $test) }}" style="display: none;">
         {{ csrf_field() }}
-        <input type="hidden" id="question-ids" name="ids">
+        <input type="hidden" id="questions" name="questions">
     </form>
 @stop
 
@@ -195,17 +196,20 @@
                 }
             });
 
-            let ids = [];
+            let questions = [];
             $('#submit-button').click(function(){
                 $('.question-checkbox:checked').each(function () {
-                    ids.push($(this).val());
+                    questions.push({
+                        id: $(this).val(),
+                        type: $(this).data('type')
+                    });
                 });
 
-                if (!ids) {
+                if (!questions) {
                     alertError('请选择题库试题后再提交');
                 }
 
-                $('#question-ids').val(JSON.stringify(ids));
+                $('#questions').val(JSON.stringify(questions));
                 globalLoading();
                 $('#submit-form').submit();
             });

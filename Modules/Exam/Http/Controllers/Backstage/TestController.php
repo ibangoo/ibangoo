@@ -252,7 +252,49 @@ class TestController extends Controller
      */
     public function attachQuestions(Test $test, Request $request)
     {
-        $test->questions()->attach(json_decode($request->ids, true));
+        // 获取测试配置
+        $options = json_decode($test->options, true);
+
+        // 获取提交试题
+        $questions = json_decode($request->questions, true);
+
+        // 测试已关联的试题
+        $relationQuestion = $test->questions->toArray();
+
+        // 试题统计
+        $totalQuestions = [];
+        foreach ($questions as $question) {
+            if (!isset($totalQuestions[$question['id']])) {
+                $totalQuestions[$question['id']] = $question['type'];
+            }
+        }
+
+        foreach ($relationQuestion as $question) {
+            if (!isset($totalQuestions[$question['id']])) {
+                $totalQuestions[$question['id']] = $question['type'];
+            }
+        }
+
+        $totalType = [];
+        foreach ($totalQuestions as $type) {
+            if (!isset($totalType[$type])) {
+                $totalType[$type] = 1;
+            } else{
+                $totalType[$type]++;
+            }
+        }
+
+        // 配置对比
+        foreach ($options as $option) {
+            foreach ($totalType as $type => $num) {
+                if ($option['type'] === $type) {
+                    if ($num > $option['num']) {
+                        return $this->redirectBackWithErrors(Question::$typeMap[$type].'限制关联 '.$option['num'].' 道题。');
+                    }
+                }
+            }
+        }
+        $test->questions()->attach(array_keys($totalQuestions));
 
         return $this->redirectBackWithSuccess('添加试题成功');
     }
