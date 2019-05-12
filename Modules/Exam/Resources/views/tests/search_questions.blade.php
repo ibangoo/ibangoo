@@ -6,21 +6,13 @@
             <div class="page-title-box">
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">测试管理</a></li>
-                        <li class="breadcrumb-item"><a href="javascript: void(0);">测试列表</a></li>
-                        <li class="breadcrumb-item active">管理试题</li>
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">题库管理</a></li>
+                        <li class="breadcrumb-item active">题库列表</li>
                     </ol>
                 </div>
-                <h4 class="page-title">管理试题</h4>
+                <h4 class="page-title">题库列表</h4>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-            <div class="col-md-4 mb-2"><h3>试卷：{{ $test->name }}</h3></div>
-            <div class="col-md-8 mb-2 text-md-right">
-                <a href="{{ route('backstage.tests.search_questions', $test) }}" class="btn btn-danger">添加试题</a>
-            </div>
     </div>
 
     <div class="row">
@@ -29,7 +21,7 @@
                 <div class="card-body" style="padding-bottom: 0;">
                     <div class="row mb-2">
                         <div class="col-lg-12">
-                            <form id="search-form" class="form-inline" action="{{ route('backstage.questions.index') }}">
+                            <form id="search-form" class="form-inline" action="{{ route('backstage.tests.search_questions', $test) }}">
                                 {{-- 试题类型 --}}
                                 <div class="form-group mr-3 mb-2">
                                     <label for="type-select" class="mr-2">试题类型</label>
@@ -89,18 +81,27 @@
         </div>
     </div>
 
+    <div class="jq-toast-wrap top-right" style="top: 30%; width: 150px">
+        <div class="jq-toast-single bg-warning" style="text-align: left;">
+            <h2 class="jq-toast-heading">当前所选试题</h2>
+            <h2><span style="font-size: 24px">{{ $test->questions->count() }}</span> 道</h2>
+        </div>
+        <div class="jq-toast-single bg-info" style="text-align: left;">
+            <h2 class="jq-toast-heading mb-0 text-md-center" id="submit-button">提交</h2>
+        </div>
+    </div>
+
     @if($questions->isNotEmpty())
         <div class="row mb-2">
             <div class="col-10">
                 <div class="custom-control custom-checkbox">
                     <input type="checkbox" class="custom-control-input d-inline" id="select-all-checkbox">
                     <label class="custom-control-label mr-3" for="select-all-checkbox">全选</label>
-                    <button type="button" class="btn btn-danger btn-sm" id="batch-delete">批量删除</button>
                 </div>
             </div>
             <div class="col-2" style="text-align: right">
                 @if($questions->isNotEmpty())
-                    共 {{ $questions->count() }} 条试题
+                    共 {{ $questions->total() }} 条试题
                 @endif
             </div>
         </div>
@@ -112,7 +113,14 @@
                         <div class="card-header">
                             <h5 class="card-title">
                             <span class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input question-checkbox" id="customCheck{{ $question->id }}" value="{{ $question->id }}">
+                                <input type="checkbox" 
+                                       class="custom-control-input question-checkbox" 
+                                       id="customCheck{{ $question->id }}" 
+                                       value="{{ $question->id }}"
+                                       @if (in_array($question->id, $test->questions->pluck('id')->toArray(), true))
+                                           checked
+                                       @endif
+                                >
                                 <label class="custom-control-label" for="customCheck{{ $question->id }}" style="line-height: 20px">
                                     {{ $question->id }}、
                                     <span class="badge badge-{{ get_type_name_color($question->type) }}">{{ $question->type_name }}</span>
@@ -140,15 +148,6 @@
                         <div class="card-footer" style=" display: flex; justify-content: flex-end;align-items: center;">
                             <span class="mr-2">标签：{{ $question->tags_to_string }}</span>
                             <a href="{{ route('backstage.questions.edit', ['question' => $question, 'type' => $question->type]) }}" class="card-link text-custom btn btn-primary mr-2">编辑</a>
-                            <form style="display: inline;" action="{{ route('backstage.tests.detach_questions',$test) }}" method="POST">
-                                {{ csrf_field() }}
-                                {{ method_field('DELETE') }}
-                                <input type="hidden" name="ids[]" value="{{ $question->id }}">
-                                <a href="javascript:void(0);"
-                                   onclick="swal({title: '是否确定删除？', showCancelButton: true}).then((res) => {if (res.value) $(this).parent().submit()});"
-                                   class="card-link text-custom btn btn-danger"
-                                >删除</a>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -158,15 +157,23 @@
         @include('backstage.templates.empty')
     @endif
 
-    <form id="batch-delete-form" method="POST" action="{{ route('backstage.tests.detach_questions', $test) }}" style="display: none;">
+    @if(isset($questions) && $questions->isNotEmpty() && $questions->total() > config('modules.paginator.per_page'))
+        <div class="row">
+            <div class="col-md-12" style="display: flex; justify-content: center">
+                {{ $questions->appends(request()->all())->links() }}
+            </div>
+        </div>
+    @endif
+
+    <form id="submit-form" method="POST" action="{{ route('backstage.tests.attach_questions', $test) }}" style="display: none;">
         {{ csrf_field() }}
-        {{ method_field('DELETE') }}
-        <input type="hidden" name="ids">
+        <input type="hidden" id="question-ids" name="ids">
     </form>
 @stop
 
 
 @section('after_app_js')
+    <script src="{{ asset('js/vendor/vue.js') }}"></script>
     <script>
         $(function () {
             $('.created_at').daterangepicker({
@@ -186,6 +193,21 @@
                 } else {
                     $('.question-checkbox').attr('checked', false);
                 }
+            });
+
+            let ids = [];
+            $('#submit-button').click(function(){
+                $('.question-checkbox:checked').each(function () {
+                    ids.push($(this).val());
+                });
+
+                if (!ids) {
+                    alertError('请选择题库试题后再提交');
+                }
+
+                $('#question-ids').val(JSON.stringify(ids));
+                globalLoading();
+                $('#submit-form').submit();
             });
         });
 

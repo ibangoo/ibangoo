@@ -181,7 +181,7 @@
             el: '#app',
             data: {
                 mode: '{{ $test->mode ?? 'tag'}}',
-                totalScore: {{ $test->total_score ?? null }},
+                totalScore: "{{ $test->total_score ?? null }}",
                 options: oldOptions,
                 types: {
                     radio: '单选题',

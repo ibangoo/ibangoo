@@ -52,10 +52,10 @@ class QuestionController extends Controller
     {
         try {
             $params = get_request_params($request);
-            if (isset($params['content_image'])) {
+            if (isset($params['content_image']) && !empty($params['content_image'])) {
                 $params['content_image'] = $request->file('content_image')->store('public/uploads');
             }
-            if (isset($params['explain_image'])) {
+            if (isset($params['explain_image']) && !empty($params['explain_image'])) {
                 $params['explain_image'] = $request->file('explain_image')->store('public/uploads');
             }
 
@@ -66,8 +66,8 @@ class QuestionController extends Controller
                 'content' => $params['content'],
                 'content_image' => $params['content_image'],
                 'options' => $params['options'],
-                'explain' => $params['explain'],
-                'explain_image' => $params['explain_image'],
+                'explain' => $params['explain'] ?? null,
+                'explain_image' => $params['explain_image'] ?? null,
             ]);
 
             // 关联标签

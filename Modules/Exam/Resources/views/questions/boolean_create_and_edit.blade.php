@@ -298,7 +298,7 @@
 
                     return this.options.push({
                         is_right: false,
-                        body: "错误",
+                        body: this.options.length === 1 ? '正确' : '"错误"',
                         code: String.fromCharCode((65 + this.options.length))
                     });
                 },
@@ -309,11 +309,9 @@
                     this.rightAnswer = value;
                     for (let i = 0; i < this.options.length; i++) {
                         this.options[i].is_right = false;
-                        this.options[i].body = '错误';
                     }
 
                     this.options[key].is_right = true;
-                    this.options[key].body = '正确';
 
                     return true;
                 }

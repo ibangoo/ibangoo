@@ -4,7 +4,6 @@ namespace Modules\Exam\Http\Controllers\Backstage;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Modules\Exam\Entities\Question;
 use Modules\Exam\Entities\Tag;
@@ -145,5 +144,49 @@ class TestController extends Controller
             ->get();
 
         return view('exam::tests.questions', compact('tags', 'test', 'questions'));
+    }
+
+    public function searchQuestions(Test $test, Request $request)
+    {
+        $tags = Tag::query()
+            ->where('status', true)
+            ->get();
+
+        $questions = Question::query()
+            ->with(['tags'])
+            ->when($request->type, function ($query) use ($request) {
+                return $query->where('type', $request->type);
+            })
+            ->when($request->get('content'), function ($query) use ($request) {
+                return $query->where('content', 'like', '%'.$request->get('content').'%');
+            })
+            ->when($request->get('created_at'), function ($query) use ($request) {
+                if ($request->created_at[0] && $request->created_at[1]) {
+                    return $query->whereBetween('created_at', $request->created_at);
+                }
+            })
+            ->when($request->get('tags'), function ($query) use ($request) {
+                return $query->whereHas('tags', function ($subQuery) use ($request) {
+                    return $subQuery->whereIn('id', $request->tags);
+                });
+            })
+            ->latest()
+            ->paginate(config('modules.paginator.per_page'));
+
+        return view('exam::tests.search_questions', compact('test', 'tags', 'questions'));
+    }
+
+    public function attachQuestions(Test $test, Request $request)
+    {
+        $test->questions()->attach(json_decode($request->ids, true));
+
+        return $this->redirectBackWithSuccess('添加试题成功');
+    }
+
+    public function detachQuestions(Test $test, Request $request)
+    {
+        $test->questions()->detach(is_string($request->ids) ? json_decode($request->ids, true) : $request->ids);
+
+        return $this->redirectBackWithSuccess('删除试题成功');
     }
 }
