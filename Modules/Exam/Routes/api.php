@@ -11,4 +11,7 @@ $api->version(config('api.version'), [
 
     // 获取测试详情
     $api->get('tests/{test}/questions', 'TestController@questions')->name('api.tests.questions');
+
+    // 提交测试试卷
+    $api->post('test-paper', 'TestPaperController@store')->name('api.test-paper.store');
 });

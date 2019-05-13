@@ -18,11 +18,11 @@ if (!function_exists('get_request_params')) {
     /**
      * 获取请求参数
      *
-     * @param \Illuminate\Foundation\Http\FormRequest $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return array
      */
-    function get_request_params(\Illuminate\Foundation\Http\FormRequest $request)
+    function get_request_params(\Illuminate\Http\Request $request)
     {
         return $request->only(array_keys($request->rules()));
     }
