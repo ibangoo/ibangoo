@@ -31,8 +31,6 @@ class TestRequest extends FormRequest
                     'mode' => ['nullable', 'string'],
                     'tags' => ['nullable'],
                 ];
-            default:
-                return [];
                 break;
         }
     }

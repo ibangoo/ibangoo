@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Dingo\Api\Routing\Helpers;
+use League\Fractal\TransformerAbstract;
 
 trait ApiHelpers
 {
@@ -109,13 +110,42 @@ trait ApiHelpers
         ])->setStatusCode($statusCode);
     }
 
-    public function responseCollection($data, $transformer)
+    /**
+     * 响应集合
+     *
+     * @param $data
+     * @param $transformer
+     *
+     * @return \Dingo\Api\Http\Response
+     */
+    public function responseCollection($data, TransformerAbstract $transformer)
     {
         return $this->response->collection($data, $transformer);
     }
 
-    public function responsePaginator($data, $transformer)
+    /**
+     * 响应分页
+     *
+     * @param $data
+     * @param $transformer
+     *
+     * @return \Dingo\Api\Http\Response
+     */
+    public function responsePaginator($data, TransformerAbstract $transformer)
     {
         return $this->response->paginator($data, $transformer);
+    }
+
+    /**
+     * 响应模型
+     *
+     * @param $data
+     * @param $transformer
+     *
+     * @return \Dingo\Api\Http\Response
+     */
+    public function responseItem($data, TransformerAbstract $transformer)
+    {
+        return $this->response->item($data, $transformer);
     }
 }
