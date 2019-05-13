@@ -272,7 +272,7 @@
             methods: {
                 addOption: function () {
                     return this.options.push({
-                        is_right: false,
+                        is_right: true,
                         body: "",
                         code: String.fromCharCode((65 + this.options.length))
                     });

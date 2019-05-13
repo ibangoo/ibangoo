@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Question extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['type', 'content', 'content_image', 'options', 'explain', 'explain_image'];
+    protected $fillable = ['type', 'content', 'content_image', 'options', 'explain', 'explain_image', 'answer'];
     const TYPE_RADIO = 'radio';
     const TYPE_CHECKBOX = 'checkbox';
     const TYPE_BOOLEAN = 'boolean';
