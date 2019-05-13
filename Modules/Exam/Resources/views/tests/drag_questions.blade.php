@@ -40,7 +40,8 @@
                 <form id="sort-form" action="{{ route('backstage.tests.sort_questions',$test) }}" class="form-inline" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="sort">
-                    <button id="sort-button" type="submit" class="btn btn-primary mt-2">排序</button>
+                    <button id="sort-button" type="submit" class="btn btn-primary mt-2 mr-2">排序</button>
+                    <a href="{{ route('backstage.tests.questions', $test) }}" class="btn btn-info mt-2">返回</a>
                 </form>
             </div>
         </div>

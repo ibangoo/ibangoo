@@ -294,7 +294,8 @@ class TestController extends Controller
                 }
             }
         }
-        $test->questions()->attach(array_keys($totalQuestions));
+
+        $test->questions()->sync(array_keys($totalQuestions));
 
         return $this->redirectBackWithSuccess('添加试题成功');
     }
@@ -331,7 +332,6 @@ class TestController extends Controller
                 'sort' => $item['sort'],
             ];
         }
-
         $test->questions()->sync($data);
 
         return $this->redirectBackWithSuccess('排序成功');
