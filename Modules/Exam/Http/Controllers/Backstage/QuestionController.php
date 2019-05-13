@@ -59,6 +59,19 @@ class QuestionController extends Controller
                 $params['explain_image'] = $request->file('explain_image')->store('public/uploads');
             }
 
+            // 获取正确答案
+            foreach (json_decode($params['options']) as $option) {
+                if (in_array($params['type'], [Question::TYPE_RADIO, Question::TYPE_CHECKBOX, Question::TYPE_INPUT], true)) {
+                    if ((boolean)$option->is_right) {
+                        $params['answer'] = $option->code;
+                    }
+                }
+
+                if ($params['type'] === Question::TYPE_INPUT) {
+                    $params['answer'] .= $option->code;
+                }
+            }
+
             // 创建试题
             DB::beginTransaction();
             $question = Question::query()->create([
@@ -68,6 +81,7 @@ class QuestionController extends Controller
                 'options' => $params['options'],
                 'explain' => $params['explain'] ?? null,
                 'explain_image' => $params['explain_image'] ?? null,
+                'answer' => $params['answer'] ?? null,
             ]);
 
             // 关联标签
@@ -103,8 +117,21 @@ class QuestionController extends Controller
                 $params['explain_image'] = $request->file('explain_image')->store('public/uploads');
             }
 
+            // 获取正确答案
+            foreach (json_decode($params['options']) as $option) {
+                if (in_array($params['type'], [Question::TYPE_RADIO, Question::TYPE_CHECKBOX, Question::TYPE_INPUT], true)) {
+                    if ((boolean)$option->is_right) {
+                        $params['answer'] = $option->code;
+                    }
+                }
+
+                if ($params['type'] === Question::TYPE_INPUT) {
+                    $params['answer'] .= $option->code;
+                }
+            }
+
             // 修改试题
-           $question->update(array_filter($params));
+            $question->update(array_filter($params));
 
             // 关联标签
             $question->tags()->sync($params['tags'] ?? []);
