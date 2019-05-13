@@ -20,7 +20,7 @@ class TestRequest extends FormRequest
                     'total_score' => ['required', 'integer'],
                     'options' => ['required', 'string'],
                     'mode' => ['required', 'string'],
-                    'tags' => ['nullable']
+                    'tags' => ['nullable'],
                 ];
                 break;
             case 'backstage.tests.update':
@@ -29,8 +29,10 @@ class TestRequest extends FormRequest
                     'total_score' => ['nullable', 'integer'],
                     'options' => ['nullable', 'string'],
                     'mode' => ['nullable', 'string'],
-                    'tags' => ['nullable']
+                    'tags' => ['nullable'],
                 ];
+            default:
+                return [];
                 break;
         }
     }
@@ -42,7 +44,7 @@ class TestRequest extends FormRequest
             'total_score' => '设置总分',
             'options' => '设置试题选项',
             'mode' => '出题方式',
-            'tags' => '标签'
+            'tags' => '标签',
         ];
     }
 

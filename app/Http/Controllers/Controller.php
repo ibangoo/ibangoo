@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\ApiHelpers;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -10,5 +11,5 @@ use App\Traits\ResponsesAndRedirects;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ResponsesAndRedirects;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ResponsesAndRedirects, ApiHelpers;
 }

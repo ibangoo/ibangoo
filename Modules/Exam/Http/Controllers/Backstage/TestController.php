@@ -295,7 +295,20 @@ class TestController extends Controller
             }
         }
 
-        $test->questions()->sync(array_keys($totalQuestions));
+        DB::beginTransaction();
+        try {
+            // 判断是否存在主观题型
+            if (in_array(Question::TYPE_TEXTAREA, $totalQuestions, true)) {
+                $test->update(['is_auto' => false]);
+            }
+
+            $test->questions()->sync(array_keys($totalQuestions));
+        } catch (\Throwable $throwable) {
+            DB::rollBack();
+
+            return $this->redirectBackWithErrors($throwable->getMessage());
+        }
+        DB::commit();
 
         return $this->redirectBackWithSuccess('添加试题成功');
     }
