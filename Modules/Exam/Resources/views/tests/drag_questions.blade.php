@@ -37,7 +37,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <form id="sort-form" action="{{ route('backstage.tests.sort_questions',$test) }}" class="form-inline" method="post">
+                <form id="sort-form" action="{{ route('backstage.tests.sort-questions',$test) }}" class="form-inline" method="post">
                     {{ csrf_field() }}
                     <input type="hidden" name="sort">
                     <button id="sort-button" type="submit" class="btn btn-primary mt-2 mr-2">排序</button>

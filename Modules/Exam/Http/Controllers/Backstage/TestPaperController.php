@@ -3,77 +3,25 @@
 namespace Modules\Exam\Http\Controllers\Backstage;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Exam\Entities\TestPaper;
 
 class TestPaperController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return view('exam::index');
-    }
+        $testPapers = TestPaper::query()
+            ->when($request->user_name, function ($query) use ($request) {
+                return $query->where('user_name', 'like', '%'.$request->user_name.'%');
+            })
+            ->when($request->status, function ($query) use ($request) {
+                return $query->where('status', $request->status);
+            })
+            ->when($request->created_at, function ($query) use ($request) {
+                return $query->whereBetween('created_at', $request->created_at);
+            })
+            ->paginate(config('modules.paginator.per_page'));
 
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('exam::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('exam::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('exam::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @param int $id
-     * @return Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('exam::test_papers.index', compact('testPapers'));
     }
 }

@@ -19,8 +19,8 @@
     <div class="row">
         <div class="col-md-4 mb-2"><h3>试卷：{{ $test->name }}</h3></div>
         <div class="col-md-8 mb-2 text-md-right">
-            <a href="{{ route('backstage.tests.search_questions', $test) }}" class="btn btn-danger ml-2">添加试题</a>
-            <a href="{{ route('backstage.tests.drag_questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
+            <a href="{{ route('backstage.tests.search-questions', $test) }}" class="btn btn-danger ml-2">添加试题</a>
+            <a href="{{ route('backstage.tests.drag-questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
         </div>
     </div>
 
@@ -141,7 +141,7 @@
                         <div class="card-footer" style=" display: flex; justify-content: flex-end;align-items: center;">
                             <span class="mr-2">标签：{{ $question->tags_to_string }}</span>
                             <a href="{{ route('backstage.questions.edit', ['question' => $question, 'type' => $question->type]) }}" class="card-link text-custom btn btn-primary mr-2">编辑</a>
-                            <form style="display: inline;" action="{{ route('backstage.tests.detach_questions',$test) }}" method="POST">
+                            <form style="display: inline;" action="{{ route('backstage.tests.detach-questions',$test) }}" method="POST">
                                 {{ csrf_field() }}
                                 {{ method_field('DELETE') }}
                                 <input type="hidden" name="ids[]" value="{{ $question->id }}">
@@ -159,7 +159,7 @@
         @include('backstage.templates.empty')
     @endif
 
-    <form id="batch-delete-form" method="POST" action="{{ route('backstage.tests.detach_questions', $test) }}" style="display: none;">
+    <form id="batch-delete-form" method="POST" action="{{ route('backstage.tests.detach-questions', $test) }}" style="display: none;">
         {{ csrf_field() }}
         {{ method_field('DELETE') }}
         <input type="hidden" name="ids">

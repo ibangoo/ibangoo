@@ -53,7 +53,7 @@
                                                     <a href="{{ route('backstage.tests.edit', $test) }}" class="btn btn-primary mr-1">编辑</a>
                                                     <a href="#" class="btn btn-primary mr-1">已提交试卷</a>
                                                     <a href="{{ route('backstage.tests.questions', $test) }}" class="btn btn-primary mr-1">管理试题</a>
-                                                    <form action="{{ route('backstage.tests.change_status', $test)  }}" method="POST" style="display: inline;">
+                                                    <form action="{{ route('backstage.tests.change-status', $test)  }}" method="POST" style="display: inline;">
                                                         {{ csrf_field() }}
                                                         {{ method_field('PATCH') }}
                                                         <button type="submit" class="btn btn-{{ $test->status ? 'danger' : 'info' }} mr-1" onclick="globalLoading()">{{ $test->status ? '禁用' : '启用' }}</button>

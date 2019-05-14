@@ -21,7 +21,7 @@
                 <div class="card-body" style="padding-bottom: 0;">
                     <div class="row mb-2">
                         <div class="col-lg-12">
-                            <form id="search-form" class="form-inline" action="{{ route('backstage.tests.search_questions', $test) }}">
+                            <form id="search-form" class="form-inline" action="{{ route('backstage.tests.search-questions', $test) }}">
                                 {{-- 试题类型 --}}
                                 <div class="form-group mr-3 mb-2">
                                     <label for="type-select" class="mr-2">试题类型</label>
@@ -166,7 +166,7 @@
         </div>
     @endif
 
-    <form id="submit-form" method="POST" action="{{ route('backstage.tests.attach_questions', $test) }}" style="display: none;">
+    <form id="submit-form" method="POST" action="{{ route('backstage.tests.attach-questions', $test) }}" style="display: none;">
         {{ csrf_field() }}
         <input type="hidden" id="questions" name="questions">
     </form>

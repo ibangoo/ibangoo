@@ -60,7 +60,7 @@
                         <a href="{{ route('backstage.tests.create') }}">新增测试</a>
                     </li>
                     <li>
-                        <a href="#">已提交试卷</a>
+                        <a href="{{ route('backstage.test-papers.index') }}">已提交试卷</a>
                     </li>
                 </ul>
             </li>

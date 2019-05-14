@@ -55,16 +55,12 @@
                                     <input id="created_at_start" type="text"
                                            class="form-control mr-2 created_at"
                                            name="created_at[]"
-                                           data-single-date-picker="true"
-                                           data-date-format="yyyy-mm-dd"
                                            value="{{ request('created_at') ? request('created_at')[0] : '' }}"
                                     >
                                     <label for="created_at_start_end" class="mr-2">-</label>
                                     <input id="created_at_start_end" type="text"
                                            class="form-control mr-2 created_at"
                                            name="created_at[]"
-                                           data-single-date-picker="true"
-                                           data-date-format="yyyy-mm-dd"
                                            value="{{ request('created_at') ? request('created_at')[1] : '' }}"
                                     >
                                 </div>
@@ -157,7 +153,7 @@
         </div>
     @endif
 
-    <form id="batch-delete-form" method="POST" action="{{ route('backstage.questions.batch_destroy') }}" style="display: none;">
+    <form id="batch-delete-form" method="POST" action="{{ route('backstage.questions.batch-destroy') }}" style="display: none;">
         {{ csrf_field() }}
         {{ method_field('DELETE') }}
         <input type="hidden" name="ids">
