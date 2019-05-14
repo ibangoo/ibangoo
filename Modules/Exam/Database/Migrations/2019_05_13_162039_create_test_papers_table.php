@@ -25,7 +25,6 @@ class CreateTestPapersTable extends Migration
             $table->unsignedInteger('actual_score')->comment('测试实际分数');
             $table->enum('status', ['fail', 'pass', 'credit', 'distinction', 'high_distinction'])->default('fail')->comment('状态：fail=不及格；pass=及格；credit=中等；distinction=良好；high_distinction=优秀');
             $table->boolean('is_judged')->default(true)->comment('是否已经判卷');
-            $table->boolean('is_published')->default(false)->comment('是否公布成绩');
             $table->json('answers')->comment('用户答题');
             $table->json('content')->comment('测试试卷内容');
             $table->timestamps();

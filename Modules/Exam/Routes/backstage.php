@@ -24,6 +24,6 @@ Route::name('backstage.')->group(function () {
 
     // 已提交试卷
     Route::patch('test-papers/{testPaper}/change-score', 'TestPaperController@changeScore')->name('test-papers.change-score');
-    Route::patch('test-papers/{testPaper}/publish', 'TestPaperController@publish')->name('test-papers.publish');
+    Route::patch('test-papers/{testPaper}/judged', 'TestPaperController@judged')->name('test-papers.judged');
     Route::resource('test-papers', 'TestPaperController');
 });

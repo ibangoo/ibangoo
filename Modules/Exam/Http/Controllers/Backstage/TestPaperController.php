@@ -61,9 +61,9 @@ class TestPaperController extends Controller
         return $this->redirectBackWithSuccess('修改分数成功');
     }
 
-    public function publish(TestPaper $testPaper)
+    public function judged(TestPaper $testPaper)
     {
-        $testPaper->update(['is_published' => true]);
+        $testPaper->update(['is_judged' => true]);
 
         return $this->redirectBackWithSuccess('公布试卷成绩成功');
     }

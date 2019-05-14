@@ -44,7 +44,7 @@ class TestPaperController extends Controller
         }
 
         $params = get_request_params($request);
-        $params['is_judged'] = in_array(Question::TYPE_TEXTAREA, array_keys($typeScore), true) ? true : false;
+        $params['is_judged'] = in_array(Question::TYPE_TEXTAREA, array_keys($typeScore)) ? false : true;
         $params['total_score'] = $test->total_score;
         $params['actual_score'] = $actualScore;
         if ($content) {

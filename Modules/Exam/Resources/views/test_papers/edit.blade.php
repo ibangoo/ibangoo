@@ -84,8 +84,12 @@
                     @endforeach
                 </div>
                 <div class="card-footer">
-                    <form action="{{ route('backstage.test-papers.publish', $test) }}" class="form-inline">
-                        <button class="btn btn-primary mr-2">公布成绩</button>
+                    <form action="{{ route('backstage.test-papers.judged', $testPaper) }}" class="form-inline">
+                        {{ csrf_field() }}
+                        {{ method_field('PATCH') }}
+                        @if (!$testPaper->is_judged)
+                            <button class="btn btn-primary mr-2">判卷完成</button>
+                        @endif
                         <a href="{{ route('backstage.test-papers.index') }}" class="btn btn-info">返回</a>
                     </form>
                 </div>
