@@ -88,7 +88,7 @@
                         {{ csrf_field() }}
                         {{ method_field('PATCH') }}
                         @if (!$testPaper->is_judged)
-                            <button class="btn btn-primary mr-2">判卷完成</button>
+                            <button class="btn btn-primary mr-2">完成判卷</button>
                         @endif
                         <a href="{{ route('backstage.test-papers.index') }}" class="btn btn-info">返回</a>
                     </form>
