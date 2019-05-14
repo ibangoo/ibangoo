@@ -30,7 +30,7 @@
                                 <div class="form-group mr-2">
                                     <label for="status" class="mr-2">分数筛选</label>
                                     <select id="status" class="custom-select mr-2" name="status">
-                                        <option disabled value="" selected>请选择</option>
+                                        <option value="" selected>全选</option>
                                         @foreach(\Modules\Exam\Entities\TestPaper::$statusMap as $value => $title)
                                             <option value="{{ $value }}" @if ($value === request('status')) selected @endif>{{ $title }}</option>
                                         @endforeach
@@ -94,7 +94,7 @@
                                         <td>{{ $testPaper->status_label }}</td>
                                         <td>{{ $testPaper->user_phone }}</td>
                                         <td>
-                                            @if($testPaper->is_judge)
+                                            @if($testPaper->is_judged)
                                                 <a href="{{route('backstage.test-papers.edit', $testPaper) }}" class="btn btn-info">查看详情</a>
                                             @else
                                                 <a href="{{route('backstage.test-papers.edit', $testPaper) }}" class="btn btn-danger">判卷</a>

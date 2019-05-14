@@ -15,7 +15,7 @@ class TestPaper extends Model
         'total_score',
         'actual_score',
         'status',
-        'is_judge',
+        'is_judged',
         'answers',
         'content',
     ];
@@ -32,8 +32,23 @@ class TestPaper extends Model
         self::STATUS_HIGH_DISTINCTION => '优秀',
     ];
 
+    /**
+     * 获取状态名称
+     *
+     * @return mixed
+     */
     public function getStatusLabelAttribute()
     {
         return self::$statusMap[$this->status];
+    }
+
+    /**
+     * 获取关联测试
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function test()
+    {
+        return $this->belongsTo(Test::class);
     }
 }

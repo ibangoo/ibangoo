@@ -23,5 +23,7 @@ Route::name('backstage.')->group(function () {
     Route::resource('questions', 'QuestionController', ['except' => ['show']]);
 
     // 已提交试卷
+    Route::patch('test-papers/{testPaper}/change-score', 'TestPaperController@changeScore')->name('test-papers.change-score');
+    Route::patch('test-papers/{testPaper}/publish', 'TestPaperController@publish')->name('test-papers.publish');
     Route::resource('test-papers', 'TestPaperController');
 });

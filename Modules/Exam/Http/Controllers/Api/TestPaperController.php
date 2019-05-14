@@ -25,20 +25,26 @@ class TestPaperController extends Controller
             foreach ($answers as $answer) {
                 if ($answer->question_id === $question->id) {
                     $content[$answer->question_id] = [
-                        'questions' => $questions,
+                        'type' => $question->type,
+                        'question' => $question,
                         'is_right' => $question->answer === $answer->question_answer,
                         'user_answer' => $answer->question_answer,
                         'right_answer' => $question->answer,
+                        'total_score' => $typeScore[$question->type],
                     ];
+
                     if ($answer->question_answer === $question->answer) {
                         $actualScore += $typeScore[$question->type];
+                        $content[$answer->question_id]['actual_score'] = $typeScore[$question->type];
+                    } else{
+                        $content[$answer->question_id]['actual_score'] = 0;
                     }
                 }
             }
         }
 
         $params = get_request_params($request);
-        $params['is_judge'] = in_array(Question::TYPE_TEXTAREA, array_keys($typeScore), true) ? true : false;
+        $params['is_judged'] = in_array(Question::TYPE_TEXTAREA, array_keys($typeScore), true) ? true : false;
         $params['total_score'] = $test->total_score;
         $params['actual_score'] = $actualScore;
         if ($content) {
