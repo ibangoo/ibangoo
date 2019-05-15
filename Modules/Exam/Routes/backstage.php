@@ -21,6 +21,10 @@ Route::name('backstage.')->group(function () {
     // 题库管理
     Route::delete('questions/batch-destroy', 'QuestionController@batchDestroy')->name('questions.batch-destroy');
     Route::resource('questions', 'QuestionController', ['except' => ['show']]);
+    Route::get('questions/import', 'QuestionController@import')->name('questions.import.view');
+    Route::post('questions/import', 'QuestionController@import')->name('questions.import.handle');
+    Route::post('questions/download-excel-template', 'QuestionController@downloadExcelTemplate')->name('questions.download-excel-template');
+
 
     // 已提交试卷
     Route::patch('test-papers/{testPaper}/change-score', 'TestPaperController@changeScore')->name('test-papers.change-score');
