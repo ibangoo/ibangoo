@@ -49,7 +49,7 @@ class QuestionController extends Controller
                     return $subQuery->whereIn('id', $request->tags);
                 });
             })
-            ->latest()
+            ->latest('id')
             ->paginate(config('modules.paginator.per_page'));
 
         return view('exam::questions.index', compact('questions', 'tags'));

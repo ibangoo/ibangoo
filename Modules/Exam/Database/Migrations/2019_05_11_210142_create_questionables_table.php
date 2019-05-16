@@ -17,7 +17,7 @@ class CreateQuestionablesTable extends Migration
             $table->unsignedBigInteger('question_id');
             $table->unsignedBigInteger('questionable_id');
             $table->string('questionable_type');
-            $table->unsignedBigInteger('sort')->comment('排序');
+            $table->unsignedBigInteger('sort')->default(0)->comment('排序');
         });
     }
 

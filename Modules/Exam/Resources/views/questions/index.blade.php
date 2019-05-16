@@ -110,21 +110,33 @@
                             </span>
                             </h5>
                         </div>
-                        <div class="card-body">
-                            @switch($question->type)
-                                @case(\Modules\Exam\Entities\Question::TYPE_RADIO)
-                                @case(\Modules\Exam\Entities\Question::TYPE_CHECKBOX)
-                                @case(\Modules\Exam\Entities\Question::TYPE_BOOLEAN)
-                                @case(\Modules\Exam\Entities\Question::TYPE_INPUT)
+                        @switch($question->type)
+                            @case(\Modules\Exam\Entities\Question::TYPE_RADIO)
+                            @case(\Modules\Exam\Entities\Question::TYPE_CHECKBOX)
+                            <div class="card-body">
                                 @foreach(json_decode($question->options) as $option)
-                                    {{ $option->code }}、{{ $option->body }} <br>
+                                    {{ $option->body }} <br>
                                 @endforeach
-                                @break;
-                                @case(\Modules\Exam\Entities\Question::TYPE_TEXTAREA)
+                            </div>
+                            @break;
+                            @case(\Modules\Exam\Entities\Question::TYPE_BOOLEAN)
+                            <div class="card-body">
+                                {{ $question->answer }}
+                            </div>
+                            @break;
+                            @case(\Modules\Exam\Entities\Question::TYPE_INPUT)
+                            <div class="card-body">
+                                @foreach(json_decode($question->options) as $option)
+                                    {{ $option->body }} <br>
+                                @endforeach
+                            </div>
+                            @break;
+                            @case(\Modules\Exam\Entities\Question::TYPE_TEXTAREA)
+                            <div class="card-body">
                                 {{ $question->options }}
-                                @break
-                            @endswitch
-                        </div>
+                            </div>
+                            @break
+                        @endswitch
                         <div class="card-footer" style=" display: flex; justify-content: flex-end;align-items: center;">
                             <span class="mr-2">标签：{{ $question->tags_to_string }}</span>
                             <a href="{{ route('backstage.questions.edit', ['question' => $question, 'type' => $question->type]) }}" class="card-link text-custom btn btn-primary mr-2">编辑</a>

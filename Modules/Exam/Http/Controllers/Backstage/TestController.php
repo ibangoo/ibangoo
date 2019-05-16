@@ -62,6 +62,109 @@ class TestController extends Controller
             $params['is_auto'] = true;
         }
 
+        // 判断是否标签抽题
+        $tags = Tag::query()
+            ->with(['questions'])
+            ->whereIn('id', $params['tags'])
+            ->get();
+        $questions = [];
+        $typeCounts = [];
+        $tagQuestionIds = [];
+        $questionRelations = [];
+        if ($params['mode'] === Test::MODE_TAGS) {
+
+            // 查询所有标签试题
+            foreach ($tags as $tag) {
+                foreach ($tag->questions as $question) {
+                    if (in_array($question->type, array_column($options, 'type'), true)) {
+                        $questions[$question->id] = $question->toArray();
+                        $typeCounts[$question->type] = 0;
+                        $tagQuestionIds[$tag->id][] = $question->id;
+                    }
+                }
+            }
+
+            foreach ($questions as $question) {
+                $typeCounts[$question['type']]++;
+            }
+
+            // 判断试题数量是否大于标签数量
+            if (count($questions) < count($tags)) {
+                return $this->redirectBackWithErrors('所选标签试题过少，无法保证每个标签至少关联一条试题');
+            }
+
+            // 判断标签试题能够满足测试配置
+            $options = json_decode($params['options'], true);
+            foreach ($options as $option) {
+                foreach ($typeCounts as $type => $count) {
+                    if ($option['type'] === $type) {
+                        if ($option['num'] > $count) {
+                            return $this->redirectBackWithErrors('所选标签试题过少，无法满足测试试题配置');
+                        }
+                    }
+                }
+            }
+        }
+
+        // 测试自动关联
+        if ($params['mode'] === Test::MODE_TAGS) {
+            // 每个标签至少关联一道试题
+            $questionRelations = [];
+            foreach ($tagQuestionIds as $tagId => $questionIds) {
+                $questionRelations[$tagId] = array_random($questionIds);
+            }
+
+            // 去重查找标签试题
+            if (count(array_unique($questionRelations)) !== count($tags)) {
+                foreach ($tags as $tag) {
+                    if (!in_array($tag->id, $questionRelations, true)) {
+                        $question = $tag->questions
+                            ->whereNotIn('id', $questionRelations)
+                            ->whereIn('type', array_column($options, 'type'))
+                            ->first();
+                        if (!$question) {
+                            return $this->redirectBackWithErrors($tag->name.'没有足够的试题用于自动关联');
+                        }
+                        $questionRelations[$tag->id] = $question->id;
+                    }
+                }
+            }
+
+            // 减去配置中已筛选试题
+            foreach ($options as $key => $option) {
+                foreach ($questionRelations as $relation) {
+                    if ($option['type'] === $questions[$relation]['type']) {
+                        if (isset($options[$key])) {
+                            --$options[$key]['num'];
+                        }
+                        if ($options[$key]['num'] === 0) {
+                            unset($options[$key]);
+                        }
+                    }
+                }
+            }
+
+            // 获取剩余配置、根据剩余配置随机抽取试题
+            $types = [];
+            foreach (array_column($options, 'num', 'type') as $type => $num) {
+                for ($i = 0; $i < $num; $i++) {
+                    $types[] = $type;
+                }
+            }
+
+            foreach ($types as $type) {
+                foreach ($questions as $question) {
+                    if ($type === $question['type']) {
+                        if (!in_array($question['id'], $questionRelations)) {
+                            $questionRelations[] = $question['id'];
+                            break;
+                        }
+                    }
+                    continue;
+                }
+            }
+        }
+
         try {
             DB::beginTransaction();
             // 创建试卷
@@ -78,6 +181,10 @@ class TestController extends Controller
                 $test->tags()->attach($params['tags']);
             }
 
+            // 标签抽题、关联试题
+            if ($params['mode'] === Test::MODE_TAGS) {
+                $test->questions()->attach($questionRelations);
+            }
         } catch (\Throwable $throwable) {
             DB::rollback();
 
@@ -279,7 +386,7 @@ class TestController extends Controller
         foreach ($totalQuestions as $type) {
             if (!isset($totalType[$type])) {
                 $totalType[$type] = 1;
-            } else{
+            } else {
                 $totalType[$type]++;
             }
         }

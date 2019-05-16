@@ -14,8 +14,7 @@ class ExamDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        $this->call(TagsTableSeederTableSeeder::class);
+        $this->call(QuestionsTableSeederTableSeeder::class);
     }
 }

@@ -22,6 +22,9 @@ class Question extends Model
         self::TYPE_TEXTAREA => '简答题',
     ];
 
+    const BOOLEAN_TRUE = '正确';
+    const BOOLEAN_FALSE = '错误';
+
     /**
      * 获取试题类型名称
      *

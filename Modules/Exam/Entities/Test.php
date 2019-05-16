@@ -14,12 +14,18 @@ class Test extends Model
         'options',
         'mode',
         'is_auto',
-        'status'
+        'status',
+    ];
+    const MODE_TAGS = 'tag';
+    const MODE_QUESTIONS = 'question';
+    public static $modeMap = [
+        self::MODE_TAGS => '标签抽题',
+        self::MODE_QUESTIONS => '题库选题',
     ];
 
     public function getModeNameAttribute()
     {
-        return $this->mode === 'tag' ? '标签选题' : '题库选题';
+        return $this->mode === self::MODE_TAGS ? '标签选题' : '题库选题';
     }
 
     public function getIsAutoLabelAttribute()

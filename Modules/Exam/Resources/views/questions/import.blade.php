@@ -114,6 +114,8 @@
             $('.custom-file-label').text(files[0].name);
         }
 
+        @if(request()->type_counts)
         $('#info-alert-modal').modal();
+        @endif
     </script>
 @stop

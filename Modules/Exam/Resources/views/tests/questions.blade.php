@@ -18,86 +18,96 @@
 
     <div class="row">
         <div class="col-md-4 mb-2"><h3>试卷：{{ $test->name }}</h3></div>
-        <div class="col-md-8 mb-2 text-md-right">
-            <a href="{{ route('backstage.tests.search-questions', $test) }}" class="btn btn-danger ml-2">添加试题</a>
-            <a href="{{ route('backstage.tests.drag-questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
-        </div>
+        @if($test->mode === \Modules\Exam\Entities\Test::MODE_QUESTIONS)
+            <div class="col-md-8 mb-2 text-md-right">
+                <a href="{{ route('backstage.tests.search-questions', $test) }}" class="btn btn-danger ml-2">添加试题</a>
+                <a href="{{ route('backstage.tests.drag-questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
+            </div>
+        @endif
     </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body" style="padding-bottom: 0;">
-                    <div class="row mb-2">
-                        <div class="col-lg-12">
-                            <form id="search-form" class="form-inline" action="{{ route('backstage.tests.questions', $test) }}">
-                                {{-- 试题类型 --}}
-                                <div class="form-group mr-3 mb-2">
-                                    <label for="type-select" class="mr-2">试题类型</label>
-                                    <select class="custom-select select2" id="type-select" name="type">
-                                        <option value="0">请选择...</option>
-                                        @foreach(\Modules\Exam\Entities\Question::$typeMap as $key => $type)
-                                            <option value="{{ $key }}" @if($key === request('type')) selected @endif>{{ $type }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                {{-- 关键字查询 --}}
-                                <div class="form-group mr-3 mb-2">
-                                    <label for="content" class="mr-2">关键字查询</label>
-                                    <input type="search" class="form-control" id="content" name="content" value="{{ request('content') }}">
-                                </div>
-                                {{-- 标签查询 --}}
-                                <div class="form-group mr-2 mb-2">
-                                    <label for="tags-select">标签查询</label>
-                                </div>
-                                <div class="form-group mr-3 mb-2" style="min-width: 150px;">
-                                    <select class="custom-select select2 select2-multiple" id="tags-select" name="tags[]" data-toggle="select2" multiple="multiple">
-                                        <option value="0">请选择...</option>
-                                        @foreach($tags as $tag)
-                                            <option value="{{ $tag->id }}" @if(in_array($tag->id, request('tags', []))) selected @endif>{{ $tag->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                {{-- 出题时间 --}}
-                                <div class="form-group mr-3 mb-2">
-                                    <label for="created_at_start" class="mr-2">出题时间</label>
-                                    <input id="created_at_start" type="text"
-                                           class="form-control mr-2 created_at"
-                                           name="created_at[]"
-                                           data-single-date-picker="true"
-                                           data-date-format="yyyy-mm-dd"
-                                           value="{{ request('created_at') ? request('created_at')[0] : '' }}"
-                                    >
-                                    <label for="created_at_start_end" class="mr-2">-</label>
-                                    <input id="created_at_start_end" type="text"
-                                           class="form-control mr-2 created_at"
-                                           name="created_at[]"
-                                           data-single-date-picker="true"
-                                           data-date-format="yyyy-mm-dd"
-                                           value="{{ request('created_at') ? request('created_at')[1] : '' }}"
-                                    >
-                                </div>
-                            </form>
+    @if($test->mode === \Modules\Exam\Entities\Test::MODE_TAGS)
+
+    @endif
+
+    @if($test->mode === \Modules\Exam\Entities\Test::MODE_QUESTIONS)
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body" style="padding-bottom: 0;">
+                        <div class="row mb-2">
+                            <div class="col-lg-12">
+                                <form id="search-form" class="form-inline" action="{{ route('backstage.tests.questions', $test) }}">
+                                    {{-- 试题类型 --}}
+                                    <div class="form-group mr-3 mb-2">
+                                        <label for="type-select" class="mr-2">试题类型</label>
+                                        <select class="custom-select select2" id="type-select" name="type">
+                                            <option value="0">请选择...</option>
+                                            @foreach(\Modules\Exam\Entities\Question::$typeMap as $key => $type)
+                                                <option value="{{ $key }}" @if($key === request('type')) selected @endif>{{ $type }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {{-- 关键字查询 --}}
+                                    <div class="form-group mr-3 mb-2">
+                                        <label for="content" class="mr-2">关键字查询</label>
+                                        <input type="search" class="form-control" id="content" name="content" value="{{ request('content') }}">
+                                    </div>
+                                    {{-- 标签查询 --}}
+                                    <div class="form-group mr-2 mb-2">
+                                        <label for="tags-select">标签查询</label>
+                                    </div>
+                                    <div class="form-group mr-3 mb-2" style="min-width: 150px;">
+                                        <select class="custom-select select2 select2-multiple" id="tags-select" name="tags[]" data-toggle="select2" multiple="multiple">
+                                            <option value="0">请选择...</option>
+                                            @foreach($tags as $tag)
+                                                <option value="{{ $tag->id }}" @if(in_array($tag->id, request('tags', []))) selected @endif>{{ $tag->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {{-- 出题时间 --}}
+                                    <div class="form-group mr-3 mb-2">
+                                        <label for="created_at_start" class="mr-2">出题时间</label>
+                                        <input id="created_at_start" type="text"
+                                               class="form-control mr-2 created_at"
+                                               name="created_at[]"
+                                               data-single-date-picker="true"
+                                               data-date-format="yyyy-mm-dd"
+                                               value="{{ request('created_at') ? request('created_at')[0] : '' }}"
+                                        >
+                                        <label for="created_at_start_end" class="mr-2">-</label>
+                                        <input id="created_at_start_end" type="text"
+                                               class="form-control mr-2 created_at"
+                                               name="created_at[]"
+                                               data-single-date-picker="true"
+                                               data-date-format="yyyy-mm-dd"
+                                               value="{{ request('created_at') ? request('created_at')[1] : '' }}"
+                                        >
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer" style="display: flex; justify-content: left">
-                    <button id="search-button" type="button" class="btn btn-rounded btn-xs btn-success" style="min-width: 200px">
-                        搜索
-                    </button>
+                    <div class="card-footer" style="display: flex; justify-content: left">
+                        <button id="search-button" type="button" class="btn btn-rounded btn-xs btn-success" style="min-width: 200px">
+                            搜索
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
     @if($questions->isNotEmpty())
         <div class="row mb-2">
             <div class="col-10">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input d-inline" id="select-all-checkbox">
-                    <label class="custom-control-label mr-3" for="select-all-checkbox">全选</label>
-                    <button type="button" class="btn btn-danger btn-sm" id="batch-delete">批量删除</button>
-                </div>
+                @if($test->mode === \Modules\Exam\Entities\Test::MODE_QUESTIONS)
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input d-inline" id="select-all-checkbox">
+                        <label class="custom-control-label mr-3" for="select-all-checkbox">全选</label>
+                        <button type="button" class="btn btn-danger btn-sm" id="batch-delete">批量删除</button>
+                    </div>
+                @endif
             </div>
             <div class="col-2" style="text-align: right">
                 @if($questions->isNotEmpty())
@@ -115,7 +125,7 @@
                             <span class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input question-checkbox" id="customCheck{{ $question->id }}" value="{{ $question->id }}">
                                 <label class="custom-control-label" for="customCheck{{ $question->id }}" style="line-height: 20px">
-                                    {{ $question->sort }}、
+                                    @if($question->sort) {{ $question->sort }}、 @endif
                                     <span class="badge badge-{{ get_type_name_color($question->type) }}">{{ $question->type_name }}</span>
                                     &nbsp;
                                     {{ $question->content }}
@@ -127,10 +137,16 @@
                             @switch($question->type)
                                 @case(\Modules\Exam\Entities\Question::TYPE_RADIO)
                                 @case(\Modules\Exam\Entities\Question::TYPE_CHECKBOX)
+                                @foreach(json_decode($question->options) as $option)
+                                    {{ $option->body }} <br>
+                                @endforeach
+                                @break;
                                 @case(\Modules\Exam\Entities\Question::TYPE_BOOLEAN)
+                                {{ $question->answer }}
+                                @break;
                                 @case(\Modules\Exam\Entities\Question::TYPE_INPUT)
                                 @foreach(json_decode($question->options) as $option)
-                                    {{ $option->code }}、{{ $option->body }} <br>
+                                    {{ $option->body }} <br>
                                 @endforeach
                                 @break;
                                 @case(\Modules\Exam\Entities\Question::TYPE_TEXTAREA)
