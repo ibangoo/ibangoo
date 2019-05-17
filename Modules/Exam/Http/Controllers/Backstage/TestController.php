@@ -97,10 +97,8 @@ class TestController extends Controller
             $options = json_decode($params['options'], true);
             foreach ($options as $option) {
                 foreach ($typeCounts as $type => $count) {
-                    if ($option['type'] === $type) {
-                        if ($option['num'] > $count) {
-                            return $this->redirectBackWithErrors('所选标签试题过少，无法满足测试试题配置');
-                        }
+                    if ($option['type'] === $type && $option['num'] > $count) {
+                        return $this->redirectBackWithErrors('所选标签试题过少，无法满足测试试题配置');
                     }
                 }
             }
@@ -152,6 +150,7 @@ class TestController extends Controller
                 }
             }
 
+            shuffle($questions);
             foreach ($types as $type) {
                 foreach ($questions as $question) {
                     if ($type === $question['type']) {
@@ -165,7 +164,6 @@ class TestController extends Controller
             }
         }
 
-        DB::beginTransaction();
         try {
             // 创建试卷
             $test = Test::query()->create([
@@ -284,14 +282,19 @@ class TestController extends Controller
             ->when($request->get('content'), function ($query) use ($request) {
                 return $query->where('content', 'like', '%'.$request->get('content').'%');
             })
-            ->when($request->get('created_at'), function ($query) use ($request) {
+            ->when($request->created_at, function ($query) use ($request) {
                 if ($request->created_at[0] && $request->created_at[1]) {
                     return $query->whereBetween('created_at', $request->created_at);
                 }
             })
-            ->when($request->get('tags'), function ($query) use ($request) {
+            ->when($request->tags, function ($query) use ($request) {
                 return $query->whereHas('tags', function ($subQuery) use ($request) {
                     return $subQuery->whereIn('id', $request->tags);
+                });
+            })
+            ->when($request->tag_id, function ($query) use ($request) {
+                return $query->whereHas('tags', function ($subQuery) use ($request) {
+                    return $subQuery->where('id', $request->tag_id);
                 });
             })
             ->latest()
@@ -355,6 +358,7 @@ class TestController extends Controller
      * @param Request $request
      *
      * @return mixed
+     * @throws \Exception
      */
     public function attachQuestions(Test $test, Request $request)
     {
@@ -478,5 +482,10 @@ class TestController extends Controller
         });
 
         return view('exam::tests.drag_questions', compact('test', 'questions'));
+    }
+
+    public function syncTags(Test $test, Request $request)
+    {
+
     }
 }

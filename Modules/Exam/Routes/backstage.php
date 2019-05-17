@@ -10,6 +10,7 @@ Route::name('backstage.')->group(function () {
     Route::get('tests/{test}/search-questions', 'TestController@searchQuestions')->name('tests.search-questions');
     Route::post('tests/{test}/attach-questions', 'TestController@attachQuestions')->name('tests.attach-questions');
     Route::delete('tests/{test}/detach-questions', 'TestController@detachQuestions')->name('tests.detach-questions');
+    Route::patch('tests/{test}/sync-tags', 'TestController@tags', 'TestController@syncTags')->name('tests.sync-tags');
 
     // 测试试题排序
     Route::get('tests/{test}/drag-questions', 'TestController@dragQuestions')->name('tests.drag-questions');

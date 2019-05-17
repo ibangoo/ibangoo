@@ -54,4 +54,14 @@ class Question extends Model
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
+
+    /**
+     * 获取标签关联的所有测试
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tests()
+    {
+        return $this->morphedByMany(Test::class, 'questionable');
+    }
 }

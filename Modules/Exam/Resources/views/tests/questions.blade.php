@@ -19,7 +19,8 @@
     <div class="row">
         <div class="col-md-4 mb-2">
             <h3>试卷：{{ $test->name }}
-                <button class="btn btn-success btn-rounded ml-2">修改标签</button>
+                <button class="btn btn-success btn-rounded ml-2" data-toggle="modal" data-target="#form-modal">修改标签
+                </button>
             </h3>
         </div>
         <div class="col-md-8 mb-2 text-md-right">
@@ -199,12 +200,36 @@
         {{ method_field('DELETE') }}
         <input type="hidden" name="ids">
     </form>
+
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="" class="pl-3 pr-3">
+                        <div class="form-group">
+                            <label for="password1">选择标签</label>
+                            <select class="custom-select select2 select2-multiple" id="tags-select" name="tags[]" data-toggle="select2" multiple="multiple">
+                                <option value="0">请选择...</option>
+                                @foreach($tags as $tag)
+                                    <option value="{{ $tag->id }}" @if(in_array($tag->id, $test->tags->pluck('id')->toArray()))) selected @endif>{{ $tag->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group text-center">
+                            <button class="btn btn-rounded btn-primary" type="submit">提交</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 
 @section('after_app_js')
     <script>
         $(function () {
+
             $('.created_at').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
