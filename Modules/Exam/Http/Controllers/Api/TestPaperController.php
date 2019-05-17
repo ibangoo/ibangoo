@@ -13,7 +13,11 @@ class TestPaperController extends Controller
     public function store(TestPaperRequest $request)
     {
         // 获取测试试题
-        $test = Test::query()->find($request->user_id);
+        $test = Test::query()->find($request->test_id);
+        if (!$test) {
+            return $this->responseInvalidArgument('测试不存在');
+        }
+
         $typeScore = array_column(json_decode($test->options, true), 'score', 'type');
         $answers = json_decode($request->answers);
         $questions = $test->questions;
@@ -36,7 +40,7 @@ class TestPaperController extends Controller
                     if ($answer->question_answer === $question->answer) {
                         $actualScore += $typeScore[$question->type];
                         $content[$answer->question_id]['actual_score'] = $typeScore[$question->type];
-                    } else{
+                    } else {
                         $content[$answer->question_id]['actual_score'] = 0;
                     }
                 }
@@ -50,6 +54,7 @@ class TestPaperController extends Controller
         if ($content) {
             $params['content'] = json_encode($content, true);
         }
+
         $testPaper = TestPaper::query()->create($params);
 
         return $this->responseArray($testPaper);
