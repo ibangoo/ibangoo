@@ -22,4 +22,14 @@ class Tag extends Model
     {
         return $this->morphedByMany(Question::class, 'taggable');
     }
+
+    /**
+     * 获取标签关联的所有测试
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphToMany
+     */
+    public function tests()
+    {
+        return $this->morphedByMany(Test::class, 'taggable');
+    }
 }

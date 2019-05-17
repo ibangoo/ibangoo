@@ -17,17 +17,36 @@
     </div>
 
     <div class="row">
-        <div class="col-md-4 mb-2"><h3>试卷：{{ $test->name }}</h3></div>
-        @if($test->mode === \Modules\Exam\Entities\Test::MODE_QUESTIONS)
-            <div class="col-md-8 mb-2 text-md-right">
+        <div class="col-md-4 mb-2">
+            <h3>试卷：{{ $test->name }}
+                <button class="btn btn-success btn-rounded ml-2">修改标签</button>
+            </h3>
+        </div>
+        <div class="col-md-8 mb-2 text-md-right">
+            @if($test->mode === \Modules\Exam\Entities\Test::MODE_QUESTIONS)
                 <a href="{{ route('backstage.tests.search-questions', $test) }}" class="btn btn-danger ml-2">添加试题</a>
-                <a href="{{ route('backstage.tests.drag-questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
-            </div>
-        @endif
+            @endif
+            <a href="{{ route('backstage.tests.drag-questions', $test) }}" class="btn btn-info ml-2">试题排序</a>
+        </div>
     </div>
 
     @if($test->mode === \Modules\Exam\Entities\Test::MODE_TAGS)
-
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{{ route('backstage.tests.questions', $test) }}"
+                   class="btn mr-2 @if (!request()->tag_id) btn-dark @else btn-light @endif"
+                >
+                    全部
+                </a>
+                @foreach ($test->tags as $tag)
+                    <a href="{{ route('backstage.tests.questions', ['test' => $test, 'tag_id'  => $tag]) }}"
+                       class="btn mr-2 @if (request()->tag_id === (string) $tag->id) btn-dark @else btn-light @endif"
+                    >
+                        {{ $tag->name }}
+                    </a>
+                @endforeach
+            </div>
+        </div>
     @endif
 
     @if($test->mode === \Modules\Exam\Entities\Test::MODE_QUESTIONS)

@@ -28,6 +28,24 @@ if (!function_exists('get_request_params')) {
     }
 }
 
+if (!function_exists('is_exist')) {
+    /**
+     * 判断变量是否存在
+     *
+     * @param $parameter
+     *
+     * @return null
+     */
+    function is_exist($parameter)
+    {
+        if (isset($parameter) && !empty($parameter)) {
+            return $parameter;
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('get_type_name_color')) {
     /**
      * 根据题型类型获取颜色

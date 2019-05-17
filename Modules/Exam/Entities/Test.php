@@ -58,6 +58,11 @@ class Test extends Model
         return $this->morphToMany(Question::class, 'questionable');
     }
 
+    /**
+     * 关联中间表
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function questionables()
     {
         return $this->hasMany(Questionable::class, 'questionable_id');

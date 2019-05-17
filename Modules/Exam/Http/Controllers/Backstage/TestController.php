@@ -165,23 +165,23 @@ class TestController extends Controller
             }
         }
 
+        DB::beginTransaction();
         try {
-            DB::beginTransaction();
             // 创建试卷
             $test = Test::query()->create([
                 'name' => $params['name'],
-                'total_score' => $params['total_score'],
-                'options' => $params['options'],
                 'mode' => $params['mode'],
                 'is_auto' => $params['is_auto'],
+                'options' => $params['options'],
+                'total_score' => $params['total_score'],
             ]);
 
-            // 关联标签
-            if (isset($params['tags']) && empty($params['tags'])) {
+            // 测试关联标签
+            if (is_exist($params['name'])) {
                 $test->tags()->attach($params['tags']);
             }
 
-            // 标签抽题、关联试题
+            // 测试关联试题
             if ($params['mode'] === Test::MODE_TAGS) {
                 $test->questions()->attach($questionRelations);
             }
@@ -190,7 +190,6 @@ class TestController extends Controller
 
             return $this->redirectBackWithErrors($throwable->getMessage());
         }
-
         DB::commit();
 
         return $this->redirectRouteWithSuccess('创建测试成功', 'backstage.tests.index');
