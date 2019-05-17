@@ -17,7 +17,7 @@ class CreateTestPapersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->comment('所属用户');
             $table->unsignedBigInteger('test_id')->comment('所属测试');
-            $table->unsignedBigInteger('judge_id')->comment('判卷用户');
+            $table->unsignedBigInteger('judge_id')->nullable()->comment('判卷用户');
             $table->string('user_name')->comment('用户名称');
             $table->string('user_phone')->comment('用户联系方式');
             $table->unsignedInteger('minutes')->comment('测试时间');
