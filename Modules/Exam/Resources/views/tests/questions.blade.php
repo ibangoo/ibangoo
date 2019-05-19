@@ -205,7 +205,9 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form action="" class="pl-3 pr-3">
+                    <form action="{{ route('backstage.tests.sync-tags', $test) }}" class="pl-3 pr-3" method="post">
+                        {{ csrf_field() }}
+                        {{ method_field('PATCH') }}
                         <div class="form-group">
                             <label for="password1">选择标签</label>
                             <select class="custom-select select2 select2-multiple" id="tags-select" name="tags[]" data-toggle="select2" multiple="multiple">
