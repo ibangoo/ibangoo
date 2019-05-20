@@ -78,7 +78,7 @@
                                         <label for="tags-select">标签查询</label>
                                     </div>
                                     <div class="form-group mr-3 mb-2" style="min-width: 150px;">
-                                        <select class="custom-select select2 select2-multiple" id="tags-select" name="tags[]" data-toggle="select2" multiple="multiple">
+                                        <select class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" name="tags[]">
                                             <option value="0">请选择...</option>
                                             @foreach($tags as $tag)
                                                 <option value="{{ $tag->id }}" @if(in_array($tag->id, request('tags', []))) selected @endif>{{ $tag->name }}</option>
@@ -231,6 +231,7 @@
 @section('after_app_js')
     <script>
         $(function () {
+            $('.select2').select();
 
             $('.created_at').daterangepicker({
                 singleDatePicker: true,

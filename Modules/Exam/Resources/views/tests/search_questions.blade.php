@@ -135,10 +135,16 @@
                             @switch($question->type)
                                 @case(\Modules\Exam\Entities\Question::TYPE_RADIO)
                                 @case(\Modules\Exam\Entities\Question::TYPE_CHECKBOX)
+                                @foreach(json_decode($question->options) as $option)
+                                    {{ $option->body }} <br>
+                                @endforeach
+                                @break;
                                 @case(\Modules\Exam\Entities\Question::TYPE_BOOLEAN)
+                                {{ $question->answer }}
+                                @break;
                                 @case(\Modules\Exam\Entities\Question::TYPE_INPUT)
                                 @foreach(json_decode($question->options) as $option)
-                                    {{ $option->code }}、{{ $option->body }} <br>
+                                    {{ $option->body }} <br>
                                 @endforeach
                                 @break;
                                 @case(\Modules\Exam\Entities\Question::TYPE_TEXTAREA)
