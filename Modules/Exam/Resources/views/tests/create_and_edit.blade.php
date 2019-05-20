@@ -28,21 +28,21 @@
                                 {{ csrf_field() }}
                                 {{ isset($test) ? method_field('PATCH') : null }}
                                 <div class="form-group row mb-3">
-                                    <label class="col-md-2 col-form-label" for="name">测试名称</label>
+                                    <label class="col-md-2 col-form-label text-right" for="name">测试名称</label>
                                     <div class="col-md-10">
                                         <input type="text" class="form-control" id="name" name="name" value="{{ $test->name ?? old('name') }}" placeholder="例如：数学期中考试">
                                     </div>
                                 </div>
 
                                 <div class="form-group row mb-3">
-                                    <label class="col-md-2 col-form-label" for="total_score">设置总分</label>
+                                    <label class="col-md-2 col-form-label text-right" for="total_score">设置总分</label>
                                     <div class="col-md-10">
                                         <input type="number" id="total_score" name="total_score" class="form-control" placeholder="设置试卷总分数" value="{{ $test->name ?? old('total_score') }}" v-model="totalScore">
                                     </div>
                                 </div>
 
                                 <div class="form-group row mb-3">
-                                    <label class="col-md-2 col-form-label" for="options">设置试题</label>
+                                    <label class="col-md-2 col-form-label text-right" for="options">设置试题</label>
                                     <div class="col-md-10">
                                         <div class="form-row align-items-center" v-for="(option, key) in options">
                                             <div class="col-auto">
@@ -74,6 +74,9 @@
                                 </div>
 
                                 <div class="form-group row mb-3">
+                                    <div class="col-md-2 text-right">
+                                        <label>添加类型</label>
+                                    </div>
                                     <div class="col-md-2">
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="customRadio1" name="mode" class="custom-control-input" value="tag" v-model="mode">
@@ -89,7 +92,7 @@
                                 </div>
 
                                 <div class="form-group row mb-3" v-show="mode === 'tag'">
-                                    <label for="tags" class="col-2 col-form-label">选择标签</label>
+                                    <label for="tags" class="col-2 col-form-label text-right">选择标签</label>
                                     <div class="col-10">
                                         <select id="tags" name="tags[]" class="select2 form-control select2-multiple" multiple="multiple" data-placeholder="请选择...">
                                             @forelse($tags as $tag)
@@ -105,6 +108,20 @@
                                             @empty
                                             @endforelse
                                         </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mb-3">
+                                    <label for="status" class="col-2 col-form-label text-right">是否禁用</label>
+                                    <div class="row col-10" style="margin-top: 8px;">
+                                        <div class="custom-control custom-radio mx-2">
+                                            <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($item->status ?? old('status', true)) === true) checked @endif>
+                                            <label class="custom-control-label" for="status1">启用</label>
+                                        </div>
+                                        <div class="custom-control custom-radio mx-2">
+                                            <input type="radio" id="status2" name="status" class="custom-control-input" value="0" @if((boolean)($item->status ?? old('status', true)) === false) checked @endif>
+                                            <label class="custom-control-label" for="status2">禁用</label>
+                                        </div>
                                     </div>
                                 </div>
 
