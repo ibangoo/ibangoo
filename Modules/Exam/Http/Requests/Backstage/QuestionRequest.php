@@ -21,7 +21,7 @@ class QuestionRequest extends FormRequest
                     'type' => ['required'],
                     'tags' => ['required'],
                     'content' => ['required', 'string'],
-                    'content_image' => ['required', 'image'],
+                    'content_image' => ['nullable', 'image'],
                     'options' => ['nullable', 'string'],
                     'explain' => ['nullable'],
                     'explain_image' => ['nullable', 'image'],

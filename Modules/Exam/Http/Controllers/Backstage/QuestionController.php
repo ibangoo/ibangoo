@@ -88,25 +88,28 @@ class QuestionController extends Controller
             }
 
             // 获取正确答案
-            foreach (json_decode($params['options']) as $option) {
-                if (in_array($params['type'], [Question::TYPE_RADIO, Question::TYPE_CHECKBOX, Question::TYPE_INPUT], true)) {
-                    if ((boolean)$option->is_right) {
-                        $params['answer'] = $option->code;
+            if ($params['type'] !== Question::TYPE_TEXTAREA) {
+                foreach (json_decode($params['options']) as $option) {
+                    if (in_array($params['type'], [Question::TYPE_RADIO, Question::TYPE_CHECKBOX, Question::TYPE_INPUT], true)) {
+                        if ((boolean)$option->is_right) {
+                            $params['answer'] = $option->code;
+                        }
+                    }
+
+                    if ($params['type'] === Question::TYPE_INPUT) {
+                        $params['answer'] .= $option->code;
                     }
                 }
-
-                if ($params['type'] === Question::TYPE_INPUT) {
-                    $params['answer'] .= $option->code;
-                }
             }
+
 
             // 创建试题
             DB::beginTransaction();
             $question = Question::query()->create([
                 'type' => $params['type'],
                 'content' => $params['content'],
-                'content_image' => $params['content_image'],
                 'options' => $params['options'],
+                'content_image' => $params['content_image'] ?? null,
                 'explain' => $params['explain'] ?? null,
                 'explain_image' => $params['explain_image'] ?? null,
                 'answer' => $params['answer'] ?? null,
@@ -285,7 +288,7 @@ class QuestionController extends Controller
                                 $code = mb_substr($option, 0, 1);
                                 $options[] = [
                                     'is_right' => $code === $item[3],
-                                    'body' => $option,
+                                    'body' => substr($option, 2),
                                     'code' => $code,
                                 ];
                             }
@@ -297,7 +300,7 @@ class QuestionController extends Controller
                                 $code = mb_substr($option, 0, 1);
                                 $options[] = [
                                     'is_right' => in_array($code, explode('、', $item[3])),
-                                    'body' => $option,
+                                    'body' => substr($option, 2),
                                     'code' => $code,
                                 ];
                             }
@@ -314,10 +317,11 @@ class QuestionController extends Controller
                             $typesCount[Question::TYPE_INPUT]++;
                             break;
                         case Question::TYPE_BOOLEAN:
-                            foreach (['正确', '错误'] as $body) {
+                            foreach (['正确', '错误'] as $index => $body) {
                                 $options[] = [
                                     'is_right' => $body === $item[3],
                                     'body' => $body,
+                                    'code' => (['A', 'B'])[$index],
                                 ];
                             }
                             $options = json_encode($options);

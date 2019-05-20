@@ -102,7 +102,7 @@
                             <span class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input question-checkbox" id="customCheck{{ $question->id }}" value="{{ $question->id }}">
                                 <label class="custom-control-label" for="customCheck{{ $question->id }}" style="line-height: 20px">
-                                    {{ $question->id }}、
+                                    {{ get_questions_sort_number($loop->iteration, $questions->currentPage()) }}、
                                     <span class="badge badge-{{ get_type_name_color($question->type) }}">{{ $question->type_name }}</span>
                                     &nbsp;
                                     {{ $question->content }}

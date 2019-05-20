@@ -85,7 +85,7 @@
                         <div class="form-group row mb-3">
                             <label for="content" class="col-2 col-form-label">题干</label>
                             <div class="col-10">
-                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? null }}</textarea>
+                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? old('content') }}</textarea>
                             </div>
                         </div>
 
@@ -123,32 +123,24 @@
                                                     v-model="rightAnswer"
                                             >
                                             <label class="custom-control-label" v-bind:for="'code' + key">
-                                                @{{ String.fromCharCode((65+key)) }}
+                                               &nbsp;
                                             </label>
                                         </div>
                                     </div>
                                     <div class="col-auto">
                                         <input type="text" class="form-control mb-2" v-model="option.body" readonly>
                                     </div>
-                                    <div class="col-auto">
-                                        <button type="button" class="btn btn-danger mb-2" v-on:click="delOption(key)">
-                                            删除
-                                        </button>
-                                    </div>
                                     <div class="col-auto" v-if="option.is_right === true">
                                         <button type="button" class="btn btn-success mb-2">正确答案</button>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-primary" v-on:click="addOption()">
-                                    <i class="dripicons-plus"> </i>添加选项
-                                </button>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label for="explain" class="col-2 col-form-label">试题解析</label>
                             <div class="col-10">
-                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? null }}</textarea>
+                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? old('explain') }}</textarea>
                             </div>
                         </div>
 
@@ -228,8 +220,13 @@
                         return false;
                     }
                 }
-                $('#options').val(JSON.stringify(options));
 
+                if (options.length === 0 || options.length === 1) {
+                    alertError('请配置【正确】、【错误】选项');
+
+                    return false;
+                }
+                $('#options').val(JSON.stringify(options));
             });
         });
 
@@ -263,8 +260,12 @@
             }
         }
 
-        let oldOptions = [];
-        let oldRightAnswer = "";
+        let oldOptions = [{"is_right": true, "body": "正确", "code": "A"}, {
+            "is_right": false,
+            "body": "错误",
+            "code": "B"
+        }];
+        let oldRightAnswer = "A";
         @if(old('options'))
             oldOptions = {!! old('options') !!};
             for (let i = 0; i < oldOptions.length; i++) {
@@ -298,12 +299,15 @@
 
                     return this.options.push({
                         is_right: false,
-                        body: this.options.length === 1 ? '正确' : '"错误"',
+                        body: this.options.length === 1 ? '正确' : '错误',
                         code: String.fromCharCode((65 + this.options.length))
                     });
                 },
                 delOption: function (key) {
-                    return this.options.splice(key, 1);
+                    this.options.splice(key, 1);
+                    if (this.options.length === 0){
+                        this.rightAnswer = null;
+                    }
                 },
                 setAnswerRight: function (key, value) {
                     this.rightAnswer = value;

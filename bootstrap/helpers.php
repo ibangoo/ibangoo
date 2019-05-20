@@ -67,3 +67,22 @@ if (!function_exists('get_type_name_color')) {
         return $rules[$type];
     }
 }
+
+if (!function_exists('get_questions_sort_number')) {
+    /**
+     * 根据题型类型获取颜色
+     *
+     * @param $page
+     * @param $sortNumber
+     *
+     * @return mixed
+     */
+    function get_questions_sort_number($sortNumber, $page = 0)
+    {
+        if ($page === 0 || $page === 1) {
+            return $sortNumber;
+        }
+
+        return $sortNumber + ($page * config('modules.paginator.per_page'));
+    }
+}

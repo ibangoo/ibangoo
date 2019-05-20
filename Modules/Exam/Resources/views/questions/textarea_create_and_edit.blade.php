@@ -84,7 +84,7 @@
                         <div class="form-group row mb-3">
                             <label for="content" class="col-2 col-form-label">题干</label>
                             <div class="col-10">
-                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? null }}</textarea>
+                                <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? old('content') }}</textarea>
                             </div>
                         </div>
 
@@ -109,14 +109,14 @@
                         <div class="form-group row mb-3">
                             <label for="options" class="col-2 col-form-label">答案</label>
                             <div class="col-10">
-                                <textarea id="options" name="options" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="此内容会显示在试卷报告中，方便阅卷老师进行参考，不会展示给学生">{{ $question->options ?? null }}</textarea>
+                                <textarea id="options" name="options" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="此内容会显示在试卷报告中，方便阅卷老师进行参考，不会展示给学生">{{ $question->options ?? old('options') }}</textarea>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
                             <label for="explain" class="col-2 col-form-label">试题解析</label>
                             <div class="col-10">
-                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? null }}</textarea>
+                                <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? old('explain') }}</textarea>
                             </div>
                         </div>
 
