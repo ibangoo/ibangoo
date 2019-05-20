@@ -26,14 +26,14 @@
                         {{ csrf_field() }}
                         {{ isset($item) ? method_field('PATCH') : null }}
                         <div class="form-group row mb-3">
-                            <label for="name" class="col-2 col-form-label">名称</label>
+                            <label for="name" class="col-2 col-form-label text-right">名称</label>
                             <div class="col-10">
                                 <input type="text" id="name" name="name" class="form-control" placeholder="" value="{{ $item->name ?? old('name') }}">
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="status" class="col-2 col-form-label">是否禁用</label>
+                            <label for="status" class="col-2 col-form-label text-right">是否禁用</label>
                             <div class="row col-10" style="margin-top: 8px;">
                                 <div class="custom-control custom-radio mx-2">
                                     <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($item->status ?? old('status')) === true) checked @endif>

@@ -32,7 +32,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <form id="submit-form"
@@ -45,7 +45,7 @@
                         {{ isset($question) ? method_field('PATCH') : null }}
 
                         <div class="form-group row mb-3">
-                            <label for="type" class="col-2 col-form-label">类型</label>
+                            <label for="type" class="col-2 col-form-label text-right">类型</label>
                             <div class="row col-10" style="margin-top: 8px;">
                                 @foreach(\Modules\Exam\Entities\Question::$typeMap as $key => $type)
                                     <div class="custom-control custom-radio mx-2">
@@ -63,7 +63,7 @@
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="tags" class="col-2 col-form-label">标签</label>
+                            <label for="tags" class="col-2 col-form-label text-right">标签</label>
                             <div class="col-10">
                                 <select id="tags" name="tags[]" class="select2 form-control select2-multiple" data-toggle="select2" multiple="multiple" data-placeholder="选择标签">
                                     @forelse($tags as $tag)
@@ -83,14 +83,14 @@
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="content" class="col-2 col-form-label">题干</label>
+                            <label for="content" class="col-2 col-form-label text-right">题干</label>
                             <div class="col-10">
                                 <textarea id="content" name="content" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->content ?? old('content')  }}</textarea>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="content_image" class="col-2 col-form-label">题干插图</label>
+                            <label for="content_image" class="col-2 col-form-label text-right">题干插图</label>
                             <div class="col-10">
                                 <div class="custom-file">
                                     <input type="file"
@@ -114,7 +114,7 @@
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label class="col-2 col-form-label">选项</label>
+                            <label class="col-2 col-form-label text-right">选项</label>
                             <div id="options-container" class="col-10">
                                 <div class="form-row align-items-center" v-for="(option, key) in options">
                                     <div class="col-auto">
@@ -151,14 +151,14 @@
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="explain" class="col-2 col-form-label">试题解析</label>
+                            <label for="explain" class="col-2 col-form-label text-right">试题解析</label>
                             <div class="col-10">
                                 <textarea id="explain" name="explain" data-toggle="maxlength" class="form-control" maxlength="225" rows="3" placeholder="请填写题干内容">{{ $question->explain ?? old('explain')  }}</textarea>
                             </div>
                         </div>
 
                         <div class="form-group row mb-3">
-                            <label for="explain_image" class="col-2 col-form-label">解析插图</label>
+                            <label for="explain_image" class="col-2 col-form-label text-right">解析插图</label>
                             <div class="col-10">
                                 <div class="custom-file">
                                     <input type="file"
