@@ -82,6 +82,9 @@
                                             <input type="radio" id="customRadio1" name="mode" class="custom-control-input"
                                                    v-model="mode"
                                                    value="{{ \Modules\Exam\Entities\Test::MODE_TAGS}}"
+                                                   @if (isset($test))
+                                                       disabled
+                                                   @endif
                                             >
                                             <label class="custom-control-label" for="customRadio1">标签抽题</label>
                                         </div>
@@ -91,6 +94,9 @@
                                             <input type="radio" id="customRadio2" name="mode" class="custom-control-input"
                                                    v-model="mode"
                                                    value="{{ \Modules\Exam\Entities\Test::MODE_QUESTIONS }}"
+                                                   @if (isset($test))
+                                                       disabled
+                                                   @endif
                                             >
                                             <label class="custom-control-label" for="customRadio2">题库选题</label>
                                         </div>
@@ -121,11 +127,13 @@
                                     <label for="status" class="col-2 col-form-label text-right">是否禁用</label>
                                     <div class="row col-10" style="margin-top: 8px;">
                                         <div class="custom-control custom-radio mx-2">
-                                            <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($test->status ?? old('status', true)) === true) checked @endif>
+                                            <input type="radio" id="status1" name="status" class="custom-control-input" value="1"
+                                                   @if((boolean)($test->status ?? old('status', true)) === true) checked @endif>
                                             <label class="custom-control-label" for="status1">启用</label>
                                         </div>
                                         <div class="custom-control custom-radio mx-2">
-                                            <input type="radio" id="status2" name="status" class="custom-control-input" value="0" @if((boolean)($test->status ?? old('status', true)) === false) checked @endif>
+                                            <input type="radio" id="status2" name="status" class="custom-control-input" value="0"
+                                                   @if((boolean)($test->status ?? old('status', true)) === false) checked @endif>
                                             <label class="custom-control-label" for="status2">禁用</label>
                                         </div>
                                     </div>

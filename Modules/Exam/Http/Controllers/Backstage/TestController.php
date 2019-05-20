@@ -53,7 +53,7 @@ class TestController extends Controller
         $params = get_request_params($request);
 
         // 判断是否存在主观题
-        $params['is_auto'] = null;
+        $params['is_auto'] = true;
         if ($options = json_decode($params['options'], true)) {
             foreach ($options as $option) {
                 if ($option['type'] === 'textarea') {
@@ -61,7 +61,6 @@ class TestController extends Controller
                     break;
                 }
             }
-            $params['is_auto'] = true;
         }
 
         // 判断是否标签抽题
@@ -175,10 +174,11 @@ class TestController extends Controller
                 'is_auto' => $params['is_auto'],
                 'options' => $params['options'],
                 'total_score' => $params['total_score'],
+                'status' => $params['status']
             ]);
 
             // 测试关联标签
-            if (is_exist($params['tags'])) {
+            if (isset($params['tags']) && !empty($params['tags'])) {
                 $test->tags()->attach($params['tags']);
             }
 
@@ -189,7 +189,7 @@ class TestController extends Controller
         } catch (\Throwable $throwable) {
             DB::rollback();
 
-            return $this->redirectBackWithErrors($throwable->getMessage());
+            return $this->redirectBackWithErrors($throwable->getMessage(). $throwable->getLine());
         }
         DB::commit();
 
