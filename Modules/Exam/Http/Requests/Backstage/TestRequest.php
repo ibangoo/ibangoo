@@ -3,6 +3,7 @@
 namespace Modules\Exam\Http\Requests\Backstage;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\Exam\Entities\Test;
 
 class TestRequest extends FormRequest
 {
@@ -20,7 +21,8 @@ class TestRequest extends FormRequest
                     'total_score' => ['required', 'integer'],
                     'options' => ['required', 'string'],
                     'mode' => ['required', 'string'],
-                    'tags' => ['nullable'],
+                    'tags' => $this->input('mode') === Test::MODE_QUESTIONS ? ['nullable'] : ['required'],
+                    'status' => ['required', 'boolean'],
                 ];
                 break;
             case 'backstage.tests.update':
@@ -30,6 +32,7 @@ class TestRequest extends FormRequest
                     'options' => ['nullable', 'string'],
                     'mode' => ['nullable', 'string'],
                     'tags' => ['nullable'],
+                    'status' => ['required', 'boolean'],
                 ];
                 break;
         }

@@ -53,6 +53,7 @@ class TestController extends Controller
         $params = get_request_params($request);
 
         // 判断是否存在主观题
+        $params['is_auto'] = null;
         if ($options = json_decode($params['options'], true)) {
             foreach ($options as $option) {
                 if ($option['type'] === 'textarea') {
@@ -64,15 +65,16 @@ class TestController extends Controller
         }
 
         // 判断是否标签抽题
-        $tags = Tag::query()
-            ->with(['questions'])
-            ->whereIn('id', $params['tags'])
-            ->get();
+        $tags = [];
         $questions = [];
         $typeCounts = [];
         $tagQuestionIds = [];
         $questionRelations = [];
         if ($params['mode'] === Test::MODE_TAGS) {
+            $tags = Tag::query()
+                ->with(['questions'])
+                ->whereIn('id', $params['tags'])
+                ->get();
 
             // 查询所有标签试题
             foreach ($tags as $tag) {
@@ -176,7 +178,7 @@ class TestController extends Controller
             ]);
 
             // 测试关联标签
-            if (is_exist($params['name'])) {
+            if (is_exist($params['tags'])) {
                 $test->tags()->attach($params['tags']);
             }
 

@@ -37,7 +37,7 @@
                                 <div class="form-group row mb-3">
                                     <label class="col-md-2 col-form-label text-right" for="total_score">设置总分</label>
                                     <div class="col-md-10">
-                                        <input type="number" id="total_score" name="total_score" class="form-control" placeholder="设置试卷总分数" value="{{ $test->name ?? old('total_score') }}" v-model="totalScore">
+                                        <input type="text" id="total_score" name="total_score" class="form-control" placeholder="设置试卷总分数" v-model="totalScore">
                                     </div>
                                 </div>
 
@@ -79,13 +79,19 @@
                                     </div>
                                     <div class="col-md-2">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" id="customRadio1" name="mode" class="custom-control-input" value="tag" v-model="mode">
+                                            <input type="radio" id="customRadio1" name="mode" class="custom-control-input"
+                                                   v-model="mode"
+                                                   value="{{ \Modules\Exam\Entities\Test::MODE_TAGS}}"
+                                            >
                                             <label class="custom-control-label" for="customRadio1">标签抽题</label>
                                         </div>
                                     </div>
                                     <div class="col-md-2">
                                         <div class="custom-control custom-radio">
-                                            <input type="radio" id="customRadio2" name="mode" class="custom-control-input" value="question" v-model="mode">
+                                            <input type="radio" id="customRadio2" name="mode" class="custom-control-input"
+                                                   v-model="mode"
+                                                   value="{{ \Modules\Exam\Entities\Test::MODE_QUESTIONS }}"
+                                            >
                                             <label class="custom-control-label" for="customRadio2">题库选题</label>
                                         </div>
                                     </div>
@@ -115,11 +121,11 @@
                                     <label for="status" class="col-2 col-form-label text-right">是否禁用</label>
                                     <div class="row col-10" style="margin-top: 8px;">
                                         <div class="custom-control custom-radio mx-2">
-                                            <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($item->status ?? old('status', true)) === true) checked @endif>
+                                            <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($test->status ?? old('status', true)) === true) checked @endif>
                                             <label class="custom-control-label" for="status1">启用</label>
                                         </div>
                                         <div class="custom-control custom-radio mx-2">
-                                            <input type="radio" id="status2" name="status" class="custom-control-input" value="0" @if((boolean)($item->status ?? old('status', true)) === false) checked @endif>
+                                            <input type="radio" id="status2" name="status" class="custom-control-input" value="0" @if((boolean)($test->status ?? old('status', true)) === false) checked @endif>
                                             <label class="custom-control-label" for="status2">禁用</label>
                                         </div>
                                     </div>
@@ -184,44 +190,42 @@
         });
 
         let oldOptions = [];
-        let oldRightAnswer = "";
         @if(old('options'))
             oldOptions = {!! old('options') !!};
         @endif
 
-        @if(isset($test) && !empty($test->options)){
+        @if(isset($test) && !empty($test->options))
             oldOptions = {!! $test->options !!}
-        }
         @endif
 
         let app = new Vue({
-            el: '#app',
-            data: {
-                mode: '{{ $test->mode ?? 'tag'}}',
-                totalScore: "{{ $test->total_score ?? null }}",
-                options: oldOptions,
-                types: {
-                    radio: '单选题',
-                    checkbox: '多选题',
-                    boolean: '判断题',
-                    input: '填空题',
-                    textarea: '简答题'
-                }
-            },
-            methods: {
-                addOption: function () {
-                    let obj = {
-                        type: "",
-                        num: null,
-                        score: null,
-                    };
+                el: '#app',
+                data: {
+                    mode: "{{ $test->mode ?? old('mode') }}",
+                    totalScore: "{{ $test->total_score ?? old('total_score') }}",
+                    options: oldOptions,
+                    types: {
+                        radio: '单选题',
+                        checkbox: '多选题',
+                        boolean: '判断题',
+                        input: '填空题',
+                        textarea: '简答题'
+                    }
+                },
+                methods: {
+                    addOption: function () {
+                        let obj = {
+                            type: "",
+                            num: null,
+                            score: null,
+                        };
 
-                    return this.options.push(obj);
-                },
-                delOption: function (key) {
-                    return this.options.splice(key, 1);
-                },
-            }
-        });
+                        return this.options.push(obj);
+                    },
+                    delOption: function (key) {
+                        return this.options.splice(key, 1);
+                    },
+                }
+            });
     </script>
 @stop
