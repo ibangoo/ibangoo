@@ -112,7 +112,10 @@
                             <div id="options-container" class="col-10">
                                 <div class="form-row align-items-center" v-for="(option, key) in options">
                                     <div class="col-auto">
-                                        <input type="text" class="form-control mb-2" v-model="option.body">
+                                        <label v-bind:for="'option_key_' + key">@{{ key+1 }}</label>
+                                    </div>
+                                    <div class="col-auto">
+                                        <input v-bind:id="'option_key_' + key" type="text" class="form-control mb-2" v-model="option.body">
                                     </div>
                                     <div class="col-auto">
                                         <button type="button" class="btn btn-danger mb-2" v-on:click="delOption(key)">
@@ -209,7 +212,6 @@
                     }
                 }
                 $('#options').val(JSON.stringify(options));
-
             });
         });
 
@@ -254,41 +256,41 @@
         }
         @endif
 
-        @if(isset($question))
+                @if(isset($question))
             oldOptions = {!! $question->options !!};
-            for (let i = 0; i < oldOptions.length; i++) {
-                if (oldOptions[i].is_right === true) {
-                    oldRightAnswer = oldOptions[i].code;
-                }
+        for (let i = 0; i < oldOptions.length; i++) {
+            if (oldOptions[i].is_right === true) {
+                oldRightAnswer = oldOptions[i].code;
             }
-        @endif
+        }
+                @endif
 
         let app = new Vue({
-            el: '#options-container',
-            data: {
-                options: oldOptions,
-                rightAnswer: oldRightAnswer
-            },
-            methods: {
-                addOption: function () {
-                    return this.options.push({
-                        is_right: true,
-                        body: "",
-                        code: String.fromCharCode((65 + this.options.length))
-                    });
+                el: '#options-container',
+                data: {
+                    options: oldOptions,
+                    rightAnswer: oldRightAnswer
                 },
-                delOption: function (key) {
-                    return this.options.splice(key, 1);
-                },
-                setAnswerRight: function (key, value) {
-                    this.rightAnswer = value;
-                    for (let i = 0; i < this.options.length; i++) {
-                        this.options[i].is_right = false;
-                    }
+                methods: {
+                    addOption: function () {
+                        return this.options.push({
+                            is_right: true,
+                            body: "",
+                            code: this.options.length + 1
+                        });
+                    },
+                    delOption: function (key) {
+                        return this.options.splice(key, 1);
+                    },
+                    setAnswerRight: function (key, value) {
+                        this.rightAnswer = value;
+                        for (let i = 0; i < this.options.length; i++) {
+                            this.options[i].is_right = false;
+                        }
 
-                    return this.options[key].is_right = true;
+                        return this.options[key].is_right = true;
+                    }
                 }
-            }
-        });
+            });
     </script>
 @stop
