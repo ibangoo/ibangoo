@@ -74,13 +74,13 @@
                                 </div>
 
                                 <div class="form-group row mb-3">
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="customRadio1" name="mode" class="custom-control-input" value="tag" v-model="mode">
                                             <label class="custom-control-label" for="customRadio1">标签抽题</label>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="custom-control custom-radio">
                                             <input type="radio" id="customRadio2" name="mode" class="custom-control-input" value="question" v-model="mode">
                                             <label class="custom-control-label" for="customRadio2">题库选题</label>
