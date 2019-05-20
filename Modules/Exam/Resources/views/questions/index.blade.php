@@ -26,7 +26,7 @@
                                 <div class="form-group mr-3 mb-2">
                                     <label for="type-select" class="mr-2">试题类型</label>
                                     <select class="custom-select select2" id="type-select" name="type">
-                                        <option value="0">请选择...</option>
+                                        <option value="0" disabled selected>请选择...</option>
                                         @foreach(\Modules\Exam\Entities\Question::$typeMap as $key => $type)
                                             <option value="{{ $key }}" @if($key === request('type')) selected @endif>{{ $type }}</option>
                                         @endforeach
@@ -43,7 +43,7 @@
                                 </div>
                                 <div class="form-group mr-3 mb-2" style="min-width: 150px;">
                                     <select class="custom-select select2 select2-multiple" id="tags-select" name="tags[]" data-toggle="select2" multiple="multiple">
-                                        <option value="0">请选择...</option>
+                                        <option value="0" disabled>请选择...</option>
                                         @foreach($tags as $tag)
                                             <option value="{{ $tag->id }}" @if(in_array($tag->id, request('tags', []))) selected @endif>{{ $tag->name }}</option>
                                         @endforeach
@@ -95,7 +95,7 @@
 
         <div class="row">
             @foreach($questions as $question)
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <div class="card d-block">
                         <div class="card-header">
                             <h5 class="card-title">
