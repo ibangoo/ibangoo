@@ -36,11 +36,11 @@
                             <label for="status" class="col-2 col-form-label text-right">是否禁用</label>
                             <div class="row col-10" style="margin-top: 8px;">
                                 <div class="custom-control custom-radio mx-2">
-                                    <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($item->status ?? old('status')) === true) checked @endif>
+                                    <input type="radio" id="status1" name="status" class="custom-control-input" value="1" @if((boolean)($item->status ?? old('status', true)) === true) checked @endif>
                                     <label class="custom-control-label" for="status1">启用</label>
                                 </div>
                                 <div class="custom-control custom-radio mx-2">
-                                    <input type="radio" id="status2" name="status" class="custom-control-input" value="0" @if((boolean)($item->status ?? old('status')) === false) checked @endif>
+                                    <input type="radio" id="status2" name="status" class="custom-control-input" value="0" @if((boolean)($item->status ?? old('status', true)) === false) checked @endif>
                                     <label class="custom-control-label" for="status2">禁用</label>
                                 </div>
                             </div>
