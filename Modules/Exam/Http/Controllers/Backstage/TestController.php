@@ -370,6 +370,9 @@ class TestController extends Controller
 
         // 获取提交试题
         $questions = json_decode($request->questions, true);
+        if (!$questions) {
+            return $this->redirectBackWithErrors('尚未勾选试题');
+        }
 
         // 测试已关联的试题
         $relationQuestion = $test->questions->toArray();

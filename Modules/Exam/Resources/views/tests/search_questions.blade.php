@@ -84,7 +84,7 @@
     <div class="jq-toast-wrap top-right" style="top: 30%; width: 150px">
         <div class="jq-toast-single bg-warning" style="text-align: left;">
             <h2 class="jq-toast-heading">当前所选试题</h2>
-            <h2><span style="font-size: 24px">{{ $test->questions->count() }}</span> 道</h2>
+            <h2><span style="font-size: 24px">@{{ total }}</span> 道</h2>
         </div>
         <div class="jq-toast-single bg-info" style="text-align: left;">
             <h2 class="jq-toast-heading mb-0 text-md-center" id="submit-button">提交</h2>
@@ -182,6 +182,13 @@
 @section('after_app_js')
     <script src="{{ asset('js/vendor/vue.js') }}"></script>
     <script>
+        let app = new Vue({
+            el: '#app',
+            data: {
+                total: parseInt('{{ $test->questions->count() ?? 0 }}')
+            }
+        });
+
         $(function () {
             $('.created_at').daterangepicker({
                 singleDatePicker: true,
@@ -202,7 +209,23 @@
                 }
             });
 
+            $('.question-checkbox').click(function () {
+                if ($(this).is(':checked')){
+                    app.total++;
+                    localStorage.setItem('total', app.total);
+                } else {
+                    app.total--;
+                    localStorage.setItem('total', app.total);
+                }
+            });
+
+            localStorage.setItem('questions', JSON.stringify({!! $test->questions !!}));
+
             let questions = [];
+            if (localStorage.getItem('questions')){
+                questions = JSON.parse(localStorage.getItem('questions'));
+            }
+
             $('#submit-button').click(function(){
                 $('.question-checkbox:checked').each(function () {
                     questions.push({
@@ -216,6 +239,7 @@
                 }
 
                 $('#questions').val(JSON.stringify(questions));
+                localStorage.setItem('questions', JSON.stringify(questions));
                 globalLoading();
                 $('#submit-form').submit();
             });
