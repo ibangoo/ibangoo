@@ -13,8 +13,15 @@ class TagRequest extends FormRequest
      */
     public function rules()
     {
+        if ($this->route()->getName() === 'backstage.tags.update') {
+            return [
+                'name' => 'required|string|unique:tags,name,'.$this->id,
+                'status' => 'required|boolean',
+            ];
+        }
+
         return [
-            'name' => 'required|string',
+            'name' => 'required|string|unique:tags',
             'status' => 'required|boolean',
         ];
     }

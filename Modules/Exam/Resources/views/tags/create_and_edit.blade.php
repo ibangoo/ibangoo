@@ -25,6 +25,9 @@
                     <form action="{{ isset($item) ? route('backstage.tags.update', $item) : route('backstage.tags.store')}}" method="POST" class="form-horizontal" enctype="multipart/form-data">
                         {{ csrf_field() }}
                         {{ isset($item) ? method_field('PATCH') : null }}
+                        @if (isset($item))
+                            <input type="hidden" name="id" value="{{ $item->id }}">
+                        @endif
                         <div class="form-group row mb-3">
                             <label for="name" class="col-2 col-form-label text-right">名称</label>
                             <div class="col-10">
