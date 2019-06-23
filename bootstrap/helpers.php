@@ -1,5 +1,11 @@
 <?php
 
+if (!function_exists('is_active_route_name')){
+    function is_active_route_name($routeName){
+        return \Route::currentRouteName() === $routeName ? 'active' : '';
+    }
+}
+
 if (!function_exists('is_active_route_group')) {
     /**
      * 判断当前菜单是否属于当前路由组

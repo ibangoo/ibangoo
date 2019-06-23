@@ -12,14 +12,14 @@
         {{-- Sidebar --}}
         <ul class="metismenu side-nav">
             {{-- 标签管理 --}}
-            <li class="side-nav-item {{ is_active_route_group('tags') }}">
+            <li class="side-nav-item {{ is_active_route_group('tags') }} {{is_active_route_name('backstage.tags.edit')}}">
                 <a href="javascript: void(0);" class="side-nav-link" aria-expanded="false">
                     <i class="dripicons-copy"> </i>
                     <span> 标签管理 </span>
                     <span class="menu-arrow"> </span>
                 </a>
                 <ul class="side-nav-second-level" aria-expanded="false">
-                    <li>
+                    <li class="{{is_active_route_name('backstage.tags.edit')}}">
                         <a href="{{ route('backstage.tags.index') }}">标签列表</a>
                     </li>
                     <li>

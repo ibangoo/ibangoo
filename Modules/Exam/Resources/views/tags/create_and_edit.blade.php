@@ -8,11 +8,11 @@
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">标签管理</a></li>
                         <li class="breadcrumb-item"><a href="javascript: void(0);">标签列表</a></li>
-                        <li class="breadcrumb-item active">新增标签</li>
+                        <li class="breadcrumb-item active">{{ isset($item) ? '编辑标签' : '新增标签' }}</li>
                     </ol>
                 </div>
                 <h4 class="page-title">
-                    新增标签
+                    {{ isset($item) ? '编辑标签' : '新增标签' }}
                 </h4>
             </div>
         </div>
