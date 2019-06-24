@@ -26,7 +26,7 @@
                                 <div class="form-group mr-3 mb-2">
                                     <label for="type-select" class="mr-2">试题类型</label>
                                     <select class="custom-select select2" id="type-select" name="type">
-                                        <option value="0" disabled selected>请选择...</option>
+                                        <option value="" @if(!request('type')) selected @endif >请选择...</option>
                                         @foreach(\Modules\Exam\Entities\Question::$typeMap as $key => $type)
                                             <option value="{{ $key }}" @if($key === request('type')) selected @endif>{{ $type }}</option>
                                         @endforeach
