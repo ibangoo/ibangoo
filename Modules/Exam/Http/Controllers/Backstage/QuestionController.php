@@ -192,7 +192,7 @@ class QuestionController extends Controller
 
         DB::commit();
 
-        return $this->redirectBackWithSuccess('编辑试题成功');
+        return $this->redirectRouteWithSuccess('编辑试题成功', 'backstage.questions.index');
     }
 
     /**

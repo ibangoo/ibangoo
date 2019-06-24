@@ -244,8 +244,6 @@
                         return false;
                     }
                 }
-                return false;
-
                 $('#options').val(JSON.stringify(options));
                 globalLoading();
             });
