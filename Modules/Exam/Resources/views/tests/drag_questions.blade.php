@@ -18,8 +18,15 @@
 
     @if($questions->isNotEmpty())
         <div class="row">
-            <div class="col-md-6" id="dragula-left">
+            <div class="col-md-6">
                 <h2>排序区</h2>
+            </div>
+            <div class="col-md-6">
+                <h2>缓冲区</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" id="dragula-left">
                 @foreach($questions->sortBy('sort') as $question)
                     <div class="card d-block mb-1 sort-item" data-id="{{ $question->id }}">
                         <div class="card-header">
@@ -32,7 +39,6 @@
                 @endforeach
             </div>
             <div class="col-md-6" id="dragula-right">
-                <h2>缓冲区</h2>
             </div>
         </div>
         <div class="row">
