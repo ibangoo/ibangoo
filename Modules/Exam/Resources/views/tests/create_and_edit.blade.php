@@ -7,10 +7,10 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">测试管理</a></li>
-                        <li class="breadcrumb-item active">新建测试</li>
+                        <li class="breadcrumb-item active">{{ isset($test) ? '编辑测试' : '新建测试' }}</li>
                     </ol>
                 </div>
-                <h4 class="page-title">新建测试</h4>
+                <h4 class="page-title">{{ isset($test) ? '编辑测试' : '新建测试' }}</h4>
             </div>
         </div>
     </div>
