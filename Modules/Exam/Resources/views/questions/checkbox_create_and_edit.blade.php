@@ -209,7 +209,6 @@
                 event.stopPropagation();
 
                 let rightAnswer = Array.from(new Set(app.rightAnswer));
-                console.log(rightAnswer);
                 if (!rightAnswer.length) {
                     swal({
                         title: '操作失败',
@@ -235,7 +234,6 @@
                         return false;
                     }
                 }
-                console.log(options);
                 return false;
 
                 $('#options').val(JSON.stringify(options));
