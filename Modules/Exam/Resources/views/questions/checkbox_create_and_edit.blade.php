@@ -119,7 +119,7 @@
                                                     name="right_answer"
                                                     class="custom-control-input"
                                                     v-model="option.is_right"
-                                                    v-on:click="setAnswerRight(key)"
+                                                    v-on:click="setAnswerRight(key, $event)"
                                                     v-bind:id="'code' + key"
                                                     v-bind:value="option.code"
                                             >
@@ -208,8 +208,9 @@
             $('#submit-form').submit(function (event) {
                 event.stopPropagation();
 
-                let rightAnswer = app.rightAnswer;
-                if (!rightAnswer) {
+                let rightAnswer = Array.from(new Set(app.rightAnswer));
+                console.log(rightAnswer);
+                if (!rightAnswer.length) {
                     swal({
                         title: '操作失败',
                         text: '选择一个正确答案',
@@ -234,6 +235,8 @@
                         return false;
                     }
                 }
+                console.log(options);
+                return false;
 
                 $('#options').val(JSON.stringify(options));
                 globalLoading();
@@ -307,9 +310,18 @@
                 delOption: function (key) {
                     return this.options.splice(key, 1);
                 },
-                setAnswerRight: function (key) {
-                    this.options[key].is_right = true;
-                    this.rightAnswer.push(this.options[key].code);
+                setAnswerRight: function (key, event) {
+                    if (event.target.checked) {
+                        this.options[key].is_right = true;
+                        this.rightAnswer.push(this.options[key].code);
+                    } else {
+                        this.options[key].is_right = false;
+                        for (let i = 0; i < this.rightAnswer.length; i++) {
+                            if (this.rightAnswer[i] === this.options[key].code) {
+                                this.rightAnswer.splice(i, 1);
+                            }
+                        }
+                    }
                 }
             }
         });
