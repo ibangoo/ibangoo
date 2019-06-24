@@ -20,11 +20,11 @@
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">题库管理</a></li>
-                        <li class="breadcrumb-item active">添加试题</li>
+                        <li class="breadcrumb-item active">{{isset($question) ? '编辑试题' : '添加试题'}}</li>
                     </ol>
                 </div>
                 <h4 class="page-title">
-                    添加简答题
+                    {{isset($question) ? '编辑简答题' : '添加简答题'}}
                 </h4>
             </div>
         </div>
