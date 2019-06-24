@@ -43,7 +43,7 @@ trait ResponsesAndRedirects
      */
     public function redirectBackWithErrors($message)
     {
-        return $this->redirectBack()->withErrors($message);
+        return $this->redirectBack()->withErrors($message)->withInput();
     }
 
     /**
