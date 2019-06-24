@@ -196,6 +196,16 @@
     <script src="{{ asset('js/vendor/vue.js') }}"></script>
     <script type="text/javascript">
         $(function () {
+            // 限制标签多选数量
+            $('.select2').select2({
+                maximumSelectionLength: 5,
+                language: {
+                    maximumSelected: function (e) {
+                        return "您只能选择最多 " + e.maximum + " 个标签";
+                    }
+                }
+            });
+
             // 监听题库类型
             let type = "{{ request('type', 'radio') }}";
             $('.choice-type').click(function (event) {
