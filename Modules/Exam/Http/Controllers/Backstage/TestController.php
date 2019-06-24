@@ -263,7 +263,7 @@ class TestController extends Controller
 
         DB::commit();
 
-        return $this->redirectBackWithSuccess('修改测试成功');
+        return $this->redirectRouteWithSuccess('修改测试成功', 'backstage.tests.index');
     }
 
     /**
