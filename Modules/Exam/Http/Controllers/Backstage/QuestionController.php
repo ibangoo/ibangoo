@@ -356,8 +356,8 @@ class QuestionController extends Controller
         return view('exam::questions.import');
     }
 
-    public function downExcelTemplate()
+    public function downloadExcelTemplate()
     {
-
+        return response()->download(public_path('download/question_excel_template.xlsx'));
     }
 }

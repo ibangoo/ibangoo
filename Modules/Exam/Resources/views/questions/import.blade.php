@@ -36,7 +36,7 @@
                     <h4 class="mb-2">1.请先下载模版</h4>
                     <span>建议按多次分批导入，导入前建议试题编号分类，方便题库管理</span><br>
                     <span>请使用微软的 Office 编辑，不要使用 WPS</span>
-                    <form action="{{ route('backstage.questions.download-excel-template') }}" class="form-inline mt-2">
+                    <form method="post" action="{{ route('backstage.questions.download-excel-template') }}" class="form-inline mt-2">
                         {{ csrf_field() }}
                         <button class="btn btn-success">下载 Excel 格式模版</button>
                     </form>
@@ -54,13 +54,13 @@
                         {{ csrf_field() }}
                         <div class="form-group" style="width: 400px;">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="upload_excel" name="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                <label class="custom-file-label" for="upload_excel" style="justify-content: left;">请上传
+                                <input type="file" class="custom-file-input" id="upload-excel" name="excel" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                <label class="custom-file-label" for="upload-excel" style="justify-content: left;">请上传
                                     Excel 格式试题文件</label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary ml-2">上传</button>
+                            <button id="upload-button" class="btn btn-primary ml-2">上传</button>
                         </div>
                     </form>
                 </div>
@@ -106,7 +106,7 @@
 
 @section('after_app_js')
     <script>
-        let excelUploadElement = document.getElementById('upload_excel');
+        let excelUploadElement = document.getElementById('upload-excel');
         excelUploadElement.addEventListener('change', handleFiles, false);
 
         function handleFiles() {
@@ -117,5 +117,13 @@
         @if(request()->type_counts)
         $('#info-alert-modal').modal();
         @endif
+
+        $('#upload-button').click(function(event){
+            event.stopPropagation();
+            if (!$('#upload-excel').val()) {
+                alertError('请选择需要上传的 Excel 文件');
+                return false;
+            }
+        });
     </script>
 @stop
