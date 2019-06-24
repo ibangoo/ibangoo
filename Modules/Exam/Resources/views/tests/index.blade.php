@@ -51,7 +51,7 @@
                                                 </td>
                                                 <td>
                                                     <a href="{{ route('backstage.tests.edit', $test) }}" class="btn btn-primary mr-1">编辑</a>
-                                                    <a href="#" class="btn btn-primary mr-1">已提交试卷</a>
+                                                    <a href="{{ route('backstage.test-papers.index', ['test_id' => $test->id]) }}" class="btn btn-primary mr-1">已提交试卷</a>
                                                     <a href="{{ route('backstage.tests.questions', $test) }}" class="btn btn-primary mr-1">管理试题</a>
                                                     <form action="{{ route('backstage.tests.change-status', $test)  }}" method="POST" style="display: inline;">
                                                         {{ csrf_field() }}

@@ -23,6 +23,9 @@
                     <div class="row mb-2">
                         <div class="col-lg-12">
                             <form id="search-form" class="form-inline" action="{{ route('backstage.test-papers.index') }}">
+                                @if(request('test_id'))
+                                    <input type="hidden" name="test_id" value="{{ request('test_id') }}">
+                                @endif
                                 <div class="form-group mr-2">
                                     <label for="user_name" class="sr-only">搜索提交人姓名</label>
                                     <input type="search" class="form-control mr-2" id="user_name" name="user_name" value="{{ request('user_name') }}" placeholder="搜索提交人姓名">

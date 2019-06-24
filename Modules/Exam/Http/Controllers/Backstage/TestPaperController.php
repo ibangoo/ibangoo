@@ -23,6 +23,9 @@ class TestPaperController extends Controller
                     return $query->whereBetween('created_at', $request->created_at);
                 }
             })
+            ->when($request->test_id, function($query) use($request){
+                return $query->where('test_id', $request->test_id);
+            })
             ->paginate(config('modules.paginator.per_page'));
 
         return view('exam::test_papers.index', compact('testPapers'));
