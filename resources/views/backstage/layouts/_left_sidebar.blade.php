@@ -35,7 +35,10 @@
                     <span class="menu-arrow"> </span>
                 </a>
                 <ul class="side-nav-second-level" aria-expanded="false">
-                    <li class="{{ Route::currentRouteName() === 'backstage.questions.index' ? 'active' : null }}">
+                    <li class="{{ in_array(Route::currentRouteName(), [
+                        'backstage.questions.index',
+                        'backstage.questions.edit'
+                    ], true) ? 'active' : null }}">
                         <a href="{{ route('backstage.questions.index') }}">题库列表</a>
                     </li>
                     <li class="{{ Route::currentRouteName() === 'backstage.questions.create' ? 'active' : null }}">
