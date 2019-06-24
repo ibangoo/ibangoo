@@ -27,6 +27,9 @@
                             >
                                 {{ csrf_field() }}
                                 {{ isset($test) ? method_field('PATCH') : null }}
+                                @if(isset($test))
+                                    <input type="hidden" name="id" value="{{ $test->id }}">
+                                @endif
                                 <div class="form-group row mb-3">
                                     <label class="col-md-2 col-form-label text-right" for="name">测试名称</label>
                                     <div class="col-md-10">

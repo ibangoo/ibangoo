@@ -17,7 +17,7 @@ class TestRequest extends FormRequest
         switch ($this->route()->getName()) {
             case 'backstage.tests.store':
                 return [
-                    'name' => ['required', 'string'],
+                    'name' => ['required', 'string', 'unique:tests,name'],
                     'total_score' => ['required', 'integer'],
                     'options' => ['required', 'string'],
                     'mode' => ['required', 'string'],
@@ -27,7 +27,7 @@ class TestRequest extends FormRequest
                 break;
             case 'backstage.tests.update':
                 return [
-                    'name' => ['nullable', 'string'],
+                    'name' => ['nullable', 'string', 'unique:tests,name,'.$this->id],
                     'total_score' => ['nullable', 'integer'],
                     'options' => ['nullable', 'string'],
                     'mode' => ['nullable', 'string'],
