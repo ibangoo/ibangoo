@@ -166,15 +166,17 @@ class QuestionController extends Controller
             }
 
             // 获取正确答案
-            foreach (json_decode($params['options']) as $option) {
-                if (in_array($params['type'], [Question::TYPE_RADIO, Question::TYPE_CHECKBOX, Question::TYPE_INPUT], true)) {
-                    if ((boolean)$option->is_right) {
-                        $params['answer'] = $option->code;
+            if (!$question->type === Question::TYPE_TEXTAREA){
+                foreach (json_decode($params['options']) as $option) {
+                    if (in_array($params['type'], [Question::TYPE_RADIO, Question::TYPE_CHECKBOX, Question::TYPE_INPUT], true)) {
+                        if ((boolean)$option->is_right) {
+                            $params['answer'] = $option->code;
+                        }
                     }
-                }
 
-                if ($params['type'] === Question::TYPE_INPUT) {
-                    $params['answer'] .= $option->code;
+                    if ($params['type'] === Question::TYPE_INPUT) {
+                        $params['answer'] .= $option->code;
+                    }
                 }
             }
 
